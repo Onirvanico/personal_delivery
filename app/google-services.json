@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "685163057969",
+    "firebase_url": "https://personal-delivery-c7985.firebaseio.com",
+    "project_id": "personal-delivery-c7985",
+    "storage_bucket": "personal-delivery-c7985.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:685163057969:android:6852f2abea7ac0ff15d610",
+        "android_client_info": {
+          "package_name": "br.com.projeto.personal_delivery"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "685163057969-rrrl4de1e8r9a1ge48imgf4sut9tadnu.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "br.com.projeto.personal_delivery",
+            "certificate_hash": "ffde5f5f7120e51f1712fdb99066b04d1520c233"
+          }
+        },
+        {
+          "client_id": "685163057969-obdl906vhocbotjl9aqf1fuobkfiohuq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBzw0zTRi-ATaeCu7WJxWh-fJvgvqNitR0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "685163057969-obdl906vhocbotjl9aqf1fuobkfiohuq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
