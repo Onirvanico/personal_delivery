@@ -30,7 +30,7 @@ public class LoginActivity extends AppCompatActivity {
         linkTelaCriaConta.setOnClickListener(view -> {
             startActivity(new Intent(this, CriaContaActivity.class));
         });
-        Button btLoga = findViewById(R.id.btLogarConta);
+        Button btLoga = findViewById(R.id.btCriaConta);
         btLoga.setOnClickListener(view -> {
             logaConta();
         });
@@ -91,7 +91,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private boolean ehValidoFormulario(TextView email, TextView senha) {
         if (!email.getText().toString().isEmpty() && !senha.getText().toString().isEmpty()) return true;
-
+           senha.getText().toString().length();
         if (email.getText().toString().isEmpty()) email.setError("Preencha o campo de email");
 
         if (senha.getText().toString().isEmpty()) senha.setError("Preencha o campo de senha ");

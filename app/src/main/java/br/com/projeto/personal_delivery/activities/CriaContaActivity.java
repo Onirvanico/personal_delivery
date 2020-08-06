@@ -1,17 +1,18 @@
 package br.com.projeto.personal_delivery.activities;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import br.com.projeto.personal_delivery.R;
+import br.com.projeto.personal_delivery.auth.Autenticacao;
 import br.com.projeto.personal_delivery.model.Usuario;
 
 import static android.widget.Toast.LENGTH_LONG;
@@ -23,11 +24,11 @@ public class CriaContaActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_autenticacao);
+        setContentView(R.layout.activity_cria_conta);
 
         auth = FirebaseAuth.getInstance();
 
-        Button btCriaConta = findViewById(R.id.btLogarConta);
+        Button btCriaConta = findViewById(R.id.btCriaConta);
         btCriaConta.setOnClickListener(view -> {
             criaConta();
         });
@@ -36,23 +37,22 @@ public class CriaContaActivity extends AppCompatActivity {
     }
 
 
-
     private void criaConta() {
         Usuario usuario = preencheUsuario();
 
-        auth.createUserWithEmailAndPassword(usuario.getEmail(), usuario.getSenha())
-                .addOnCompleteListener(this, task -> {
-                    if(task.isSuccessful())  {
-                        verificaEmail();
-                        Log.i("Conta ", "Conta criada com êxito");
-                        FirebaseUser currentUser = auth.getCurrentUser();
-                        Toast.makeText(this, currentUser.getEmail(), LENGTH_LONG).show();
+        TextView inputConfirmaSenha = findViewById(R.id.inputConfirmaSenha_login);
+        String senhaConfirmacao = inputConfirmaSenha.getText().toString();
 
-                    } else {
-                        Log.w("Conta ", "Deu ruim lek" + task.getException().getMessage() );
-                    }
+        if (senhaConfirmacao.equals(usuario.getSenha())) {
+            Toast.makeText(this, "Certinho", Toast.LENGTH_SHORT).show();
+            Autenticacao autenticacao = new Autenticacao(this);
+            autenticacao.criaConta(usuario.getEmail(), usuario.getSenha());
 
-                });
+        } else {
+            Log.i("Confirma ", "senha " + usuario.getSenha()+ " senhaC " + senhaConfirmacao);
+            Toast.makeText(this, "A confirmação de senha não pode ser validada", Toast.LENGTH_SHORT).show();
+
+        }
     }
 
     private Usuario preencheUsuario() {
@@ -64,16 +64,6 @@ public class CriaContaActivity extends AppCompatActivity {
         return new Usuario(email, senha);
     }
 
-    private void verificaEmail() {
-        FirebaseUser user = auth.getCurrentUser();
-        auth.setLanguageCode("pt-br");
-        user.sendEmailVerification().addOnCompleteListener(task -> {
-           if(task.isSuccessful()) {
-               Toast.makeText(this, "Email de verificação enviado", LENGTH_LONG).show();
-           } else {
-               Log.w("Verifica email ", "Erro ao enviar email de verificação " + task.getException().getMessage() );
-           }
-        });
-    }
+
 
 }
