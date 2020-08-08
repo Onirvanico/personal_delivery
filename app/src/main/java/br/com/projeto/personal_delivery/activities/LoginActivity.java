@@ -5,31 +5,37 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.firebase.auth.FirebaseAuth;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.firebase.auth.FirebaseUser;
 
 import br.com.projeto.personal_delivery.R;
+import br.com.projeto.personal_delivery.auth.Autenticacao;
 import br.com.projeto.personal_delivery.model.Usuario;
 
 public class LoginActivity extends AppCompatActivity {
-
-    private FirebaseAuth auth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        setTitle("Login");
 
-        auth = FirebaseAuth.getInstance();
+        irParaTelaCriaConta();
 
-        TextView linkTelaCriaConta = findViewById(R.id.textLinkTelaCriaConta);
-        linkTelaCriaConta.setOnClickListener(view -> {
-            startActivity(new Intent(this, CriaContaActivity.class));
-        });
+        /*GoogleSignInOptions gso = new GoogleSignInOptions.Builder(
+                GoogleSignInOptions.DEFAULT_GAMES_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
+
+        GoogleSignInClient client = GoogleSignIn.getClient(this, gso);*/
+
+
         Button btLoga = findViewById(R.id.btCriaConta);
         btLoga.setOnClickListener(view -> {
             logaConta();
@@ -37,11 +43,18 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
+    private void irParaTelaCriaConta() {
+        TextView linkTelaCriaConta = findViewById(R.id.textLinkTelaCriaConta);
+        linkTelaCriaConta.setOnClickListener(view -> {
+            startActivity(new Intent(this, CriaContaActivity.class));
+        });
+    }
+
     @Override
     protected void onStart() {
         super.onStart();
-        FirebaseUser currentUser = auth.getCurrentUser();
-      /*  if(currentUser != null)
+       /* FirebaseUser currentUser = auth.getCurrentUser();
+        if (currentUser != null)
             vaiParaMainActivity();*/
 
     }
@@ -53,25 +66,8 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void autenticaConta(Usuario usuario) {
-        auth.signInWithEmailAndPassword(usuario.getEmail(), usuario.getSenha())
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        Log.i("Login ", "Logado com sucesso "
-                                + auth.getCurrentUser()
-                                .getEmail());
-
-                       /* if (auth.getCurrentUser() != null) {
-                            vaiParaMainActivity();
-                        }*/
-                    } else {
-                        Log.i("LoginError ", "Aí deu ruim lek" + task.getException()
-                                .getMessage());
-
-                        Toast.makeText(this,
-                                "Falha na autenticação" + task.getException().getMessage(),
-                                Toast.LENGTH_SHORT).show();
-                    }
-                });
+        new Autenticacao(this).LogaConta(usuario.getEmail(), usuario.getSenha());
+        vaiParaMainActivity();
     }
 
     private void vaiParaMainActivity() {
@@ -90,8 +86,9 @@ public class LoginActivity extends AppCompatActivity {
 
 
     private boolean ehValidoFormulario(TextView email, TextView senha) {
-        if (!email.getText().toString().isEmpty() && !senha.getText().toString().isEmpty()) return true;
-           senha.getText().toString().length();
+        if (!email.getText().toString().isEmpty() && !senha.getText().toString().isEmpty())
+            return true;
+        senha.getText().toString().length();
         if (email.getText().toString().isEmpty()) email.setError("Preencha o campo de email");
 
         if (senha.getText().toString().isEmpty()) senha.setError("Preencha o campo de senha ");

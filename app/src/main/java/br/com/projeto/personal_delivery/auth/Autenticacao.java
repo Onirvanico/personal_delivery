@@ -37,6 +37,34 @@ public class Autenticacao {
         });
     }
 
+    public void LogaConta(String email, String senha) {
+
+     auth.signInWithEmailAndPassword(email, senha)
+             .addOnCompleteListener(task -> {
+        if (task.isSuccessful()) {
+            Log.i("Login ", "Logado com sucesso "
+                    + auth.getCurrentUser()
+                    .getEmail());
+            Toast.makeText(context, "valor " + auth.getCurrentUser().isEmailVerified(), Toast.LENGTH_SHORT).show();
+
+            if (!auth.getCurrentUser().isEmailVerified()) {
+                Toast.makeText(context,
+                        "Confirme o cadastro enviado ao seu email", Toast.LENGTH_SHORT).show();
+
+            }
+
+        } else {
+            Log.i("LoginError ", "Aí deu ruim lek" + task.getException()
+                    .getMessage());
+
+            Toast.makeText(context,
+                    "Falha na autenticação" + task.getException().getMessage(),
+                    Toast.LENGTH_SHORT).show();
+        }
+    });
+    }
+
+
     private void verificaEmail() {
         FirebaseUser user = auth.getCurrentUser();
         auth.setLanguageCode("pt-br");

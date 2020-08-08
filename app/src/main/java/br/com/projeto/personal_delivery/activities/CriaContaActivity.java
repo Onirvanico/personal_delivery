@@ -8,6 +8,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.auth.EmailAuthCredential;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -19,14 +20,13 @@ import static android.widget.Toast.LENGTH_LONG;
 
 public class CriaContaActivity extends AppCompatActivity {
 
-    private FirebaseAuth auth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cria_conta);
 
-        auth = FirebaseAuth.getInstance();
+        setTitle("Criar conta");
 
         Button btCriaConta = findViewById(R.id.btCriaConta);
         btCriaConta.setOnClickListener(view -> {
