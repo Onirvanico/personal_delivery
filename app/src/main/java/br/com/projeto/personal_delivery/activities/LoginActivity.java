@@ -9,12 +9,13 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseUser;
 
 import br.com.projeto.personal_delivery.R;
 import br.com.projeto.personal_delivery.auth.Autenticacao;
 import br.com.projeto.personal_delivery.model.Usuario;
+
+import static br.com.projeto.personal_delivery.utils.ValidaFormulario.ehValidoFormulario;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -95,14 +96,6 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
-    private boolean ehValidoFormulario(TextView email, TextView senha) {
-        if (!email.getText().toString().isEmpty() && !senha.getText().toString().isEmpty())
-            return true;
-        senha.getText().toString().length();
-        if (email.getText().toString().isEmpty()) email.setError("Preencha o campo de email");
 
-        if (senha.getText().toString().isEmpty()) senha.setError("Preencha o campo de senha ");
 
-        return false;
-    }
 }
