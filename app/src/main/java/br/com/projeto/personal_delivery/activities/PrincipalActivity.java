@@ -8,7 +8,7 @@ import com.google.firebase.auth.FirebaseAuth;
 
 import br.com.projeto.personal_delivery.R;
 
-public class MainActivity extends AppCompatActivity {
+public class PrincipalActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

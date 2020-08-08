@@ -5,6 +5,8 @@ import android.content.Context;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -12,7 +14,7 @@ import static android.widget.Toast.LENGTH_LONG;
 
 public class Autenticacao {
 
-    private FirebaseAuth  auth;
+    private FirebaseAuth auth;
     private Context context;
 
     public Autenticacao(Context context) {
@@ -22,46 +24,15 @@ public class Autenticacao {
 
     public void criaConta(String email, String senha) {
 
-        auth.createUserWithEmailAndPassword( email, senha)
-                .addOnCompleteListener((Activity)context, task -> {
-            if (task.isSuccessful()) {
-                verificaEmail();
-                Log.i("Conta ", "Conta criada com êxito");
-                FirebaseUser currentUser = auth.getCurrentUser();
-                Toast.makeText(context, currentUser.getEmail(), LENGTH_LONG).show();
-
-            } else {
-                Log.w("Conta ", "Deu ruim lek" + task.getException().getMessage());
-            }
-
-        });
+        auth.createUserWithEmailAndPassword(email, senha)
+                .addOnCompleteListener((Activity) context, this::naFinalizacaoDaCriacaoDaConta);
     }
 
-    public void LogaConta(String email, String senha) {
+    public FirebaseUser LogaConta(String email, String senha) {
 
-     auth.signInWithEmailAndPassword(email, senha)
-             .addOnCompleteListener(task -> {
-        if (task.isSuccessful()) {
-            Log.i("Login ", "Logado com sucesso "
-                    + auth.getCurrentUser()
-                    .getEmail());
-            Toast.makeText(context, "valor " + auth.getCurrentUser().isEmailVerified(), Toast.LENGTH_SHORT).show();
-
-            if (!auth.getCurrentUser().isEmailVerified()) {
-                Toast.makeText(context,
-                        "Confirme o cadastro enviado ao seu email", Toast.LENGTH_SHORT).show();
-
-            }
-
-        } else {
-            Log.i("LoginError ", "Aí deu ruim lek" + task.getException()
-                    .getMessage());
-
-            Toast.makeText(context,
-                    "Falha na autenticação" + task.getException().getMessage(),
-                    Toast.LENGTH_SHORT).show();
-        }
-    });
+        auth.signInWithEmailAndPassword(email, senha)
+                .addOnCompleteListener(this::naFinalizacaoDoLogin);
+        return auth.getCurrentUser();
     }
 
 
@@ -75,5 +46,39 @@ public class Autenticacao {
                 Log.w("Verifica email ", "Erro ao enviar email de verificação " + task.getException().getMessage());
             }
         });
+    }
+
+    private void naFinalizacaoDoLogin(Task<AuthResult> task) {
+        if (task.isSuccessful()) {
+            Log.i("Login ", "Logado com sucesso "
+                    + auth.getCurrentUser()
+                    .getEmail());
+
+
+            Toast.makeText(context, "valor " + auth.getCurrentUser().isEmailVerified(), Toast.LENGTH_SHORT).show();
+
+            if (!auth.getCurrentUser().isEmailVerified()) {
+                Toast.makeText(context,
+                        "Confirme o cadastro enviado ao seu email", Toast.LENGTH_SHORT).show();
+
+            }
+
+        } else {
+            Log.i("LoginError ", "Erro de autenticação " + task.getException()
+                    .getMessage());
+        }
+    }
+
+    private void naFinalizacaoDaCriacaoDaConta(Task<AuthResult> task) {
+        if (task.isSuccessful()) {
+            verificaEmail();
+            Log.i("Conta ", "Conta criada com êxito");
+            FirebaseUser currentUser = auth.getCurrentUser();
+            Toast.makeText(context, currentUser.getEmail(), LENGTH_LONG).show();
+
+        } else {
+            Log.w("Conta ", "Falha ao criar conta: "
+                    + task.getException().getMessage());
+        }
     }
 }

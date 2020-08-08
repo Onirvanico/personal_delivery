@@ -5,12 +5,11 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInClient;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseUser;
 
 import br.com.projeto.personal_delivery.R;
@@ -66,12 +65,23 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void autenticaConta(Usuario usuario) {
-        new Autenticacao(this).LogaConta(usuario.getEmail(), usuario.getSenha());
-        vaiParaMainActivity();
+
+
+        try{
+            FirebaseUser autenticado = new Autenticacao(this).
+                    LogaConta(usuario.getEmail(), usuario.getSenha());
+
+            if(autenticado.isEmailVerified())
+                vaiParaMainActivity();
+
+        } catch(NullPointerException e) {
+            Log.e("Objeto vazio ", e.getMessage() );
+            Toast.makeText(this, "usuário e/ou senha inválido", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void vaiParaMainActivity() {
-        startActivity(new Intent(this, MainActivity.class));
+        startActivity(new Intent(this, PrincipalActivity.class));
     }
 
     private Usuario preencheUsuario() {
