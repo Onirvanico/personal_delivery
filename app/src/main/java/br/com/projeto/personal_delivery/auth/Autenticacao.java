@@ -9,9 +9,10 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseNetworkException;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseUser;
+
+import br.com.projeto.personal_delivery.exceptions.FormularioException;
 
 import static android.widget.Toast.LENGTH_LONG;
 import static android.widget.Toast.LENGTH_SHORT;
@@ -39,6 +40,11 @@ public class Autenticacao {
         return auth.getCurrentUser();
     }
 
+    public void redefineSenha(String email) {
+        auth.sendPasswordResetEmail(email)
+                .addOnCompleteListener(this::naFinalizacaoDaRedefinicaoDeSenha);
+    }
+
 
     private void verificaEmail() {
         FirebaseUser user = auth.getCurrentUser();
@@ -59,8 +65,6 @@ public class Autenticacao {
                     .getEmail());
 
 
-            Toast.makeText(context, "valor " + auth.getCurrentUser().isEmailVerified(), LENGTH_SHORT).show();
-
             if (!auth.getCurrentUser().isEmailVerified()) {
                 Toast.makeText(context,
                         "Confirme o cadastro enviado ao seu email", LENGTH_SHORT).show();
@@ -68,17 +72,8 @@ public class Autenticacao {
             }
 
         } else {
-            try {
-                throw task.getException();
-
-            } catch (FirebaseNetworkException e) {
-                Toast.makeText(context, "Falha ao tentar se conectar com a internet",
-                        LENGTH_SHORT).show();
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-                Log.i("LoginError ", "Erro de autenticação " + task.getException()
+            new FormularioException().FalhaConexaoException(task, context);
+            Log.i("LoginError ", "Erro de autenticação " + task.getException()
                     .getMessage());
         }
     }
@@ -91,24 +86,23 @@ public class Autenticacao {
             Toast.makeText(context, currentUser.getEmail(), LENGTH_LONG).show();
 
         } else {
-            try {
-                throw task.getException();
-
-            } catch(FirebaseAuthUserCollisionException e) {
-                Toast.makeText(context, "Este email já possui cadastro", LENGTH_SHORT).show();
-                Log.e("Erro Cadastro", "naFinalizacaoDaCriacaoDaConta: " + e.getMessage());
-
-            } catch(FirebaseNetworkException e) {
-                Toast.makeText(context, "Falha ao tentar se conectar com a internet",
-                        LENGTH_SHORT).show();
-                Log.e("Falha Internet", "naFinalizacaoDaCriacaoDaConta: " + e.getMessage());
-
-            } catch (Exception e) {
-                Toast.makeText(context, "Erro ao tentar cadastrar usuário", LENGTH_LONG).show();
-            }
+            FormularioException formularioException = new FormularioException();
+            formularioException.ConflitoEmailException(task, context);
+            formularioException.FalhaConexaoException(task, context);
 
             Log.w("Conta ", "Falha ao criar conta: "
                     + task.getException().getMessage());
+        }
+    }
+
+    private void naFinalizacaoDaRedefinicaoDeSenha(Task<Void> task) {
+        if (task.isSuccessful()) {
+            Toast.makeText(context, "Email enviado para redefinição de sua senha",
+                    LENGTH_SHORT).show();
+        } else {
+            new FormularioException().FalhaConexaoException(task, context);
+            Toast.makeText(context, "Não foi possível enviar email para redefinição de senha",
+                    LENGTH_LONG).show();
         }
     }
 }
