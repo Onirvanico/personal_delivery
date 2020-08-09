@@ -19,11 +19,13 @@ import static br.com.projeto.personal_delivery.utils.ValidaFormulario.ehValidoFo
 
 public class LoginActivity extends AppCompatActivity {
 
+    public static final String APPBAR_LOGIN = "Login";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        setTitle("Login");
+        setTitle(APPBAR_LOGIN);
 
         irParaTelaCriaConta();
 

@@ -16,12 +16,14 @@ import br.com.projeto.personal_delivery.utils.ValidaFormulario;
 public class CriaContaActivity extends AppCompatActivity {
 
 
+    public static final String APPBAR_CRIACONTA = "Criar conta";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cria_conta);
 
-        setTitle("Criar conta");
+        setTitle(APPBAR_CRIACONTA);
 
         Button btCriaConta = findViewById(R.id.btCriaConta);
         btCriaConta.setOnClickListener(view -> {

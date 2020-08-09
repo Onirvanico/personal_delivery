@@ -8,9 +8,11 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseUser;
 
 import static android.widget.Toast.LENGTH_LONG;
+import static android.widget.Toast.LENGTH_SHORT;
 
 public class Autenticacao {
 
@@ -55,11 +57,11 @@ public class Autenticacao {
                     .getEmail());
 
 
-            Toast.makeText(context, "valor " + auth.getCurrentUser().isEmailVerified(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "valor " + auth.getCurrentUser().isEmailVerified(), LENGTH_SHORT).show();
 
             if (!auth.getCurrentUser().isEmailVerified()) {
                 Toast.makeText(context,
-                        "Confirme o cadastro enviado ao seu email", Toast.LENGTH_SHORT).show();
+                        "Confirme o cadastro enviado ao seu email", LENGTH_SHORT).show();
 
             }
 
@@ -77,6 +79,17 @@ public class Autenticacao {
             Toast.makeText(context, currentUser.getEmail(), LENGTH_LONG).show();
 
         } else {
+            try {
+                throw task.getException();
+
+            } catch (FirebaseAuthUserCollisionException e) {
+                Toast.makeText(context, "Email já cadastrado", LENGTH_SHORT).show();
+                Log.e("Erro Cadastro", "naFinalizacaoDaCriacaoDaConta: " + e.getMessage());
+
+            } catch (Exception e) {
+                Toast.makeText(context, "Erro ao tentar cadastrar usuário", LENGTH_LONG).show();
+            }
+
             Log.w("Conta ", "Falha ao criar conta: "
                     + task.getException().getMessage());
         }
