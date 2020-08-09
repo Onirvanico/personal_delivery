@@ -6,8 +6,10 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.FirebaseNetworkException;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -66,7 +68,17 @@ public class Autenticacao {
             }
 
         } else {
-            Log.i("LoginError ", "Erro de autenticação " + task.getException()
+            try {
+                throw task.getException();
+
+            } catch (FirebaseNetworkException e) {
+                Toast.makeText(context, "Falha ao tentar se conectar com a internet",
+                        LENGTH_SHORT).show();
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+                Log.i("LoginError ", "Erro de autenticação " + task.getException()
                     .getMessage());
         }
     }
@@ -82,9 +94,14 @@ public class Autenticacao {
             try {
                 throw task.getException();
 
-            } catch (FirebaseAuthUserCollisionException e) {
-                Toast.makeText(context, "Email já cadastrado", LENGTH_SHORT).show();
+            } catch(FirebaseAuthUserCollisionException e) {
+                Toast.makeText(context, "Este email já possui cadastro", LENGTH_SHORT).show();
                 Log.e("Erro Cadastro", "naFinalizacaoDaCriacaoDaConta: " + e.getMessage());
+
+            } catch(FirebaseNetworkException e) {
+                Toast.makeText(context, "Falha ao tentar se conectar com a internet",
+                        LENGTH_SHORT).show();
+                Log.e("Falha Internet", "naFinalizacaoDaCriacaoDaConta: " + e.getMessage());
 
             } catch (Exception e) {
                 Toast.makeText(context, "Erro ao tentar cadastrar usuário", LENGTH_LONG).show();
