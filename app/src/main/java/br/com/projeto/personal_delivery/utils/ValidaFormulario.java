@@ -28,7 +28,7 @@ public class ValidaFormulario {
             senha.setError("Preencha o campo de senha ");
 
         return  !ehVazio &&
-                !temTamanhoSenha(senha);
+                temTamanhoSenha(senha);
     }
 
     public static boolean ehCampoEmailVazio(TextView email) {

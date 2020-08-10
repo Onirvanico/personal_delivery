@@ -92,7 +92,6 @@ public class LoginActivity extends AppCompatActivity {
 
     private Usuario preencheUsuario() {
         TextView email = findViewById(R.id.inputEmail_login);
-        Log.i("estado ", String.valueOf(email.isSelected()));
         TextView senha = findViewById(R.id.inputSenha_login);
 
         if (ehValidoFormulario(email, senha))

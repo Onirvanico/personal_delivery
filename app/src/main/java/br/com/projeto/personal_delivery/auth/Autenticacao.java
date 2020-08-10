@@ -6,10 +6,8 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.FirebaseNetworkException;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseUser;
 
 import br.com.projeto.personal_delivery.exceptions.FormularioException;
@@ -73,7 +71,8 @@ public class Autenticacao {
             }
 
         } else {
-            new FormularioException().FalhaConexaoException(task, context);
+            FormularioException taskFormularioException = new FormularioException<Task<AuthResult>>();
+            taskFormularioException.FalhaConexaoException(task, context);
             Log.i("LoginError ", "Erro de autenticação " + task.getException()
                     .getMessage());
         }
@@ -87,9 +86,12 @@ public class Autenticacao {
             Toast.makeText(context, currentUser.getEmail(), LENGTH_LONG).show();
 
         } else {
-            FormularioException formularioException = new FormularioException();
+            FormularioException formularioException = new FormularioException<Task<AuthResult>>();
             formularioException.ConflitoEmailException(task, context);
             formularioException.FalhaConexaoException(task, context);
+
+            Toast.makeText(context, "Este não é um endereço de emai válido",
+                    LENGTH_SHORT).show();
 
             Log.w("Conta ", "Falha ao criar conta: "
                     + task.getException().getMessage());
@@ -101,7 +103,8 @@ public class Autenticacao {
             Toast.makeText(context, "Email enviado para redefinição de sua senha",
                     LENGTH_SHORT).show();
         } else {
-            new FormularioException().FalhaConexaoException(task, context);
+            FormularioException formularioException = new FormularioException<Task<Void>>();
+            formularioException.FalhaConexaoException(task, context);
             Toast.makeText(context, "Não foi possível enviar link para redefinir senha com " +
                             "o endereço informado",
                     LENGTH_LONG).show();
