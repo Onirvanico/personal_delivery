@@ -19,11 +19,13 @@ import static android.widget.Toast.LENGTH_SHORT;
 
 public class Autenticacao {
 
+    public static final String PT_BR = "pt-br";
     private FirebaseAuth auth;
     private Context context;
 
     public Autenticacao(Context context) {
         auth = FirebaseAuth.getInstance();
+        auth.setLanguageCode(PT_BR);
         this.context = context;
     }
 
@@ -48,7 +50,6 @@ public class Autenticacao {
 
     private void verificaEmail() {
         FirebaseUser user = auth.getCurrentUser();
-        auth.setLanguageCode("pt-br");
         user.sendEmailVerification().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 Toast.makeText(context, "Email de verificação enviado", LENGTH_LONG).show();
@@ -101,7 +102,8 @@ public class Autenticacao {
                     LENGTH_SHORT).show();
         } else {
             new FormularioException().FalhaConexaoException(task, context);
-            Toast.makeText(context, "Não foi possível enviar email para redefinição de senha",
+            Toast.makeText(context, "Não foi possível enviar link para redefinir senha com " +
+                            "o endereço informado",
                     LENGTH_LONG).show();
         }
     }

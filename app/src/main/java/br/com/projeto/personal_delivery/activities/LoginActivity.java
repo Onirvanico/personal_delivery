@@ -102,7 +102,10 @@ public class LoginActivity extends AppCompatActivity {
 
 
     public void irParaTelaRedefineSenha() {
-        startActivity(new Intent(this, RedefineSenhaActivity.class));
+        TextView linkTelaRedefineSenha = findViewById(R.id.textLinkTelaAlteraSenha);
+        linkTelaRedefineSenha.setOnClickListener(view -> startActivity(
+                new Intent(this, RedefineSenhaActivity.class)));
+
     }
 
 }

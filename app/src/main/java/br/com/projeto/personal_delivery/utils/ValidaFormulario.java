@@ -16,26 +16,36 @@ public class ValidaFormulario {
     public static boolean ehValidoFormulario(TextView email, TextView senha) {
         if (!ehCampoEmailVazio(email) && ehCampoSenhaValido(senha))
             return true;
-        if(!temTamanhoSenha(senha)) senha.setError("A senha deve conter no mínimo seis caracteres");
-
-        if (email.getText().toString().isEmpty()) email.setError("Preencha o campo de email");
-
-        if (senha.getText().toString().isEmpty()) senha.setError("Preencha o campo de senha ");
 
         return false;
 
     }
 
     private static boolean ehCampoSenhaValido(TextView senha) {
-        return  temTamanhoSenha(senha) &&
-                !senha.getText().toString().isEmpty();
+        boolean ehVazio = senha.getText().toString().isEmpty();
+
+        if(ehVazio)
+            senha.setError("Preencha o campo de senha ");
+
+        return  !ehVazio &&
+                !temTamanhoSenha(senha);
     }
 
-    private static boolean ehCampoEmailVazio(TextView email) {
-        return email.getText().toString().isEmpty();
+    public static boolean ehCampoEmailVazio(TextView email) {
+        boolean ehVazio = email.getText().toString().isEmpty();
+
+        if (ehVazio)
+            email.setError("Preencha o campo de email");
+
+        return ehVazio;
     }
 
     private static boolean temTamanhoSenha(TextView senha) {
+        int tamanho = senha.getText().toString().length();
+
+        if (tamanho < 6)
+            senha.setError("A senha deve conter no mínimo seis caracteres");
+
         return senha.getText().toString().length() > 5;
     }
 

@@ -34,6 +34,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="70dp"
+        android:onClick="redefinindoSenha"
         android:background="@drawable/formato_campo"
         android:text="@string/bt_redefine_senha"
         app:layout_constraintEnd_toEndOf="@+id/input_email_redefine_senha"

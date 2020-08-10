@@ -35,7 +35,6 @@ public class CriaContaActivity extends AppCompatActivity {
 
     private void criaConta() {
 
-
         try {
             Usuario usuario = preencheUsuario();
             Autenticacao autenticacao = new Autenticacao(this);
