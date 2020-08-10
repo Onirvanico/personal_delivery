@@ -90,9 +90,6 @@ public class Autenticacao {
             formularioException.ConflitoEmailException(task, context);
             formularioException.FalhaConexaoException(task, context);
 
-            Toast.makeText(context, "Este não é um endereço de emai válido",
-                    LENGTH_SHORT).show();
-
             Log.w("Conta ", "Falha ao criar conta: "
                     + task.getException().getMessage());
         }

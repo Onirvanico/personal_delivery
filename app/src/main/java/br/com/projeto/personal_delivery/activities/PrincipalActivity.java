@@ -16,5 +16,7 @@ public class PrincipalActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         FirebaseAuth.getInstance().signOut();
+
+
     }
 }

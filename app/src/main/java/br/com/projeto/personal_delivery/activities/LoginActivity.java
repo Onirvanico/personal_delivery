@@ -7,9 +7,19 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GoogleAuthProvider;
 
 import br.com.projeto.personal_delivery.R;
 import br.com.projeto.personal_delivery.auth.Autenticacao;
@@ -20,6 +30,7 @@ import static br.com.projeto.personal_delivery.utils.ValidaFormulario.ehValidoFo
 public class LoginActivity extends AppCompatActivity {
 
     public static final String APPBAR_LOGIN = "Login";
+    public static final int RC_LOGIN = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,13 +41,18 @@ public class LoginActivity extends AppCompatActivity {
         irParaTelaCriaConta();
         irParaTelaRedefineSenha();
 
-        /*GoogleSignInOptions gso = new GoogleSignInOptions.Builder(
-                GoogleSignInOptions.DEFAULT_GAMES_SIGN_IN)
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(
+                GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build();
 
-        GoogleSignInClient client = GoogleSignIn.getClient(this, gso);*/
+        GoogleSignInClient client = GoogleSignIn.getClient(this, gso);
+        Intent logaIntent = client.getSignInIntent();
+
+        startActivityForResult(logaIntent, RC_LOGIN);
+
+
 
 
         Button btLoga = findViewById(R.id.btLogaConta);
@@ -44,6 +60,20 @@ public class LoginActivity extends AppCompatActivity {
             logaConta();
         });
 
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == RC_LOGIN) {
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+            try {
+                GoogleSignInAccount conta = task.getResult(ApiException.class);
+                logaContaGoogle(conta.getIdToken());
+            } catch (ApiException e) {
+                Log.w("Erro ao logar", "onActivityResult: " + e.getMessage() );
+            }
+        }
     }
 
     private void irParaTelaCriaConta() {
@@ -72,14 +102,14 @@ public class LoginActivity extends AppCompatActivity {
 
 
         try {
-            FirebaseUser autenticado = new Autenticacao(this).
+            FirebaseUser usuarioAtenticado = new Autenticacao(this).
                     LogaConta(usuario.getEmail(), usuario.getSenha());
 
-            if (autenticado.isEmailVerified())
+            if (usuarioAtenticado.isEmailVerified())
                 vaiParaMainActivity();
 
         } catch (NullPointerException e) {
-            Log.e("Objeto vazio ", e.getMessage());
+            Log.w("Email nao verificado", e.getMessage());
             Toast.makeText(this, "usuário e/ou senha inválido",
                     Toast.LENGTH_SHORT).show();
         }
@@ -100,11 +130,24 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
-    public void irParaTelaRedefineSenha() {
+    private void irParaTelaRedefineSenha() {
         TextView linkTelaRedefineSenha = findViewById(R.id.textLinkTelaAlteraSenha);
         linkTelaRedefineSenha.setOnClickListener(view -> startActivity(
                 new Intent(this, RedefineSenhaActivity.class)));
 
     }
 
+    private void logaContaGoogle(String tokenId) {
+
+        AuthCredential credencial = GoogleAuthProvider.getCredential(tokenId, null);
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        auth.signInWithCredential(credencial).addOnCompleteListener(task -> {
+            if(task.isSuccessful()) {
+                Toast.makeText(this, "Deu boa", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "Deu ruim" + task.getException().getMessage()
+                        , Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
 }

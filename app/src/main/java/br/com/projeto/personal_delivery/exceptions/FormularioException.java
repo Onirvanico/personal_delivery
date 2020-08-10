@@ -21,6 +21,8 @@ public class FormularioException<T> {
             Log.e("Erro Cadastro", "naFinalizacaoDaCriacaoDaConta: " + e.getMessage());
         } catch(Exception e) {
             e.printStackTrace();
+            Toast.makeText(context, "Erro ao tentar cadastrar com este endereço de email",
+                    LENGTH_SHORT).show();
             Log.e("Erro Cadastro", "naFinalizacaoDaCriacaoDaConta: " + e.getMessage());
         }
     }
