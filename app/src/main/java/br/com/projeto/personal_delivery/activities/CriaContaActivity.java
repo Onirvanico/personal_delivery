@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -25,7 +24,7 @@ public class CriaContaActivity extends AppCompatActivity {
 
         setTitle(APPBAR_CRIACONTA);
 
-        Button btCriaConta = findViewById(R.id.btCriaConta);
+        Button btCriaConta = findViewById(R.id.btLogaConta);
         btCriaConta.setOnClickListener(view -> {
             criaConta();
         });

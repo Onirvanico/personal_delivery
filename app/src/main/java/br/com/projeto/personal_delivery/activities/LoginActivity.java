@@ -28,6 +28,7 @@ public class LoginActivity extends AppCompatActivity {
         setTitle(APPBAR_LOGIN);
 
         irParaTelaCriaConta();
+        irParaTelaRedefineSenha();
 
         /*GoogleSignInOptions gso = new GoogleSignInOptions.Builder(
                 GoogleSignInOptions.DEFAULT_GAMES_SIGN_IN)
@@ -38,7 +39,7 @@ public class LoginActivity extends AppCompatActivity {
         GoogleSignInClient client = GoogleSignIn.getClient(this, gso);*/
 
 
-        Button btLoga = findViewById(R.id.btCriaConta);
+        Button btLoga = findViewById(R.id.btLogaConta);
         btLoga.setOnClickListener(view -> {
             logaConta();
         });
@@ -70,20 +71,22 @@ public class LoginActivity extends AppCompatActivity {
     private void autenticaConta(Usuario usuario) {
 
 
-        try{
+        try {
             FirebaseUser autenticado = new Autenticacao(this).
                     LogaConta(usuario.getEmail(), usuario.getSenha());
 
-            if(autenticado.isEmailVerified())
+            if (autenticado.isEmailVerified())
                 vaiParaMainActivity();
 
-        } catch(NullPointerException e) {
-            Log.e("Objeto vazio ", e.getMessage() );
-            Toast.makeText(this, "usuário e/ou senha inválido", Toast.LENGTH_SHORT).show();
+        } catch (NullPointerException e) {
+            Log.e("Objeto vazio ", e.getMessage());
+            Toast.makeText(this, "usuário e/ou senha inválido",
+                    Toast.LENGTH_SHORT).show();
         }
     }
 
     private void vaiParaMainActivity() {
+
         startActivity(new Intent(this, PrincipalActivity.class));
     }
 
@@ -98,6 +101,8 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
-
+    public void irParaTelaRedefineSenha() {
+        startActivity(new Intent(this, RedefineSenhaActivity.class));
+    }
 
 }

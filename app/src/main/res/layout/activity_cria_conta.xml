@@ -8,7 +8,7 @@
     tools:context=".activities.CriaContaActivity">
 
     <Button
-        android:id="@+id/btCriaConta"
+        android:id="@+id/btLogaConta"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="30dp"
