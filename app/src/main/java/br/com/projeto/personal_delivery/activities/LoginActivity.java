@@ -23,6 +23,7 @@ import com.google.firebase.auth.GoogleAuthProvider;
 
 import br.com.projeto.personal_delivery.R;
 import br.com.projeto.personal_delivery.auth.Autenticacao;
+import br.com.projeto.personal_delivery.auth.AutenticacaoGoogle;
 import br.com.projeto.personal_delivery.model.Usuario;
 
 import static br.com.projeto.personal_delivery.utils.ValidaFormulario.ehValidoFormulario;
@@ -31,6 +32,7 @@ public class LoginActivity extends AppCompatActivity {
 
     public static final String APPBAR_LOGIN = "Login";
     public static final int RC_LOGIN = 1;
+    private AutenticacaoGoogle autenticacaoGoogle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,21 +40,27 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         setTitle(APPBAR_LOGIN);
 
+        autenticacaoGoogle = new AutenticacaoGoogle(this);
+
         irParaTelaCriaConta();
         irParaTelaRedefineSenha();
 
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(
+      /*  GoogleSignInOptions gso = new GoogleSignInOptions.Builder(
                 GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
-                .build();
+                .build();*/
 
-        GoogleSignInClient client = GoogleSignIn.getClient(this, gso);
-        Intent logaIntent = client.getSignInIntent();
-
-        startActivityForResult(logaIntent, RC_LOGIN);
+       // GoogleSignInClient client = GoogleSignIn.getClient(this, gso);
 
 
+
+        Button btLogaContaGoogle = findViewById(R.id.btLogaContaGoogle);
+        btLogaContaGoogle.setOnClickListener(view -> {
+            autenticacaoGoogle.LogaContaGoogle((client, requestLogin) -> {
+                startActivityForResult(client, requestLogin);
+            });
+        });
 
 
         Button btLoga = findViewById(R.id.btLogaConta);
@@ -65,13 +73,13 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == RC_LOGIN) {
+        if (requestCode == RC_LOGIN) {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             try {
                 GoogleSignInAccount conta = task.getResult(ApiException.class);
-                logaContaGoogle(conta.getIdToken());
+                autenticacaoGoogle.AutenticaGoogle(conta.getIdToken());
             } catch (ApiException e) {
-                Log.w("Erro ao logar", "onActivityResult: " + e.getMessage() );
+                Log.w("Erro ao logar", "onActivityResult: " + e.getMessage());
             }
         }
     }
@@ -137,17 +145,20 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
-    private void logaContaGoogle(String tokenId) {
+   /* private void logaContaGoogle(String tokenId) {
 
         AuthCredential credencial = GoogleAuthProvider.getCredential(tokenId, null);
         FirebaseAuth auth = FirebaseAuth.getInstance();
         auth.signInWithCredential(credencial).addOnCompleteListener(task -> {
-            if(task.isSuccessful()) {
+            if (task.isSuccessful()) {
                 Toast.makeText(this, "Deu boa", Toast.LENGTH_SHORT).show();
+                FirebaseUser currentUser = auth.getCurrentUser();
+                Toast.makeText(this, "user " + currentUser.getDisplayName(),
+                        Toast.LENGTH_SHORT).show();
             } else {
                 Toast.makeText(this, "Deu ruim" + task.getException().getMessage()
                         , Toast.LENGTH_SHORT).show();
             }
         });
-    }
+    }*/
 }

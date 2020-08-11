@@ -75,7 +75,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textLinkTelaAlteraSenha" />
 
-    <TextView
+    <Button
         android:id="@+id/btLogaContaGoogle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -83,7 +83,7 @@
         android:background="@drawable/formato_campo"
         android:gravity="center|center_vertical"
         android:text="Minha Conta Google"
-        android:textSize="20dp"
+        android:textSize="15sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="@id/textLinkTelaCriaConta"
         app:layout_constraintStart_toStartOf="@id/textLinkTelaCriaConta"
