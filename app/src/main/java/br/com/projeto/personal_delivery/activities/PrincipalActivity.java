@@ -1,19 +1,18 @@
 package br.com.projeto.personal_delivery.activities;
 
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
+import android.widget.TextView;
 
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.tasks.Task;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import br.com.projeto.personal_delivery.R;
+
+import static br.com.projeto.personal_delivery.consts.IntentCode.CHAVE_USUARIO;
+import static br.com.projeto.personal_delivery.consts.IntentCode.CHAVE_USUARIO_GOOGLE;
 
 public class PrincipalActivity extends AppCompatActivity {
 
@@ -22,9 +21,41 @@ public class PrincipalActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        FirebaseAuth.getInstance().signOut();
-
+        buscaUsuario();
 
     }
 
+
+    private void buscaUsuario() {
+        Intent intent = getIntent();
+        if (intent.hasExtra(CHAVE_USUARIO_GOOGLE)) {
+            setNomeUsuarioNaTela(intent, CHAVE_USUARIO_GOOGLE, "\\s+");
+
+        } else if (intent.hasExtra(CHAVE_USUARIO)) {
+            setNomeUsuarioNaTela(intent, CHAVE_USUARIO, "\\u0020");
+        }
+    }
+
+    private void setNomeUsuarioNaTela(Intent intent, String chaveUsuario, String s) {
+        FirebaseUser usuario = intent.getParcelableExtra(chaveUsuario);
+        String usuarioAtual = usuario.getDisplayName();
+        String[] nomeUsuario = usuarioAtual.split(s);
+        String primeiroNome = nomeUsuario[0];
+
+        TextView texto = findViewById(R.id.textTelaPrincipal);
+        String textoExistente = texto.getText().toString();
+        texto.setText(textoExistente + " " + primeiroNome);
+
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+    }
 }

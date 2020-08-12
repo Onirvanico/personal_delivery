@@ -7,11 +7,11 @@
     tools:context=".activities.PrincipalActivity">
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/textTelaPrincipal"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="Bem vindo à tela principal!"
+        android:text="Bem vindo à tela principal: "
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

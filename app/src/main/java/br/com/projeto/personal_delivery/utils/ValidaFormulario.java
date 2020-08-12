@@ -46,7 +46,7 @@ public class ValidaFormulario {
         if (tamanho < 6)
             senha.setError("A senha deve conter no mínimo seis caracteres");
 
-        return senha.getText().toString().length() > 5;
+        return tamanho > 5;
     }
 
     private static boolean ehMesmaSenha(TextView campoSenha, TextView campoSenhaConfirmacao) {
@@ -54,6 +54,7 @@ public class ValidaFormulario {
         String senhaConfirmacao = campoSenhaConfirmacao.getText().toString();
 
         if(!senha.equals(senhaConfirmacao)) campoSenha.setError("Senha não confirmada");
+            else campoSenha.setError(null);
 
         return senha.equals(senhaConfirmacao);
     }

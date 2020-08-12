@@ -12,26 +12,24 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInClient;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthCredential;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.GoogleAuthProvider;
 
 import br.com.projeto.personal_delivery.R;
 import br.com.projeto.personal_delivery.auth.Autenticacao;
 import br.com.projeto.personal_delivery.auth.AutenticacaoGoogle;
 import br.com.projeto.personal_delivery.model.Usuario;
 
+import static br.com.projeto.personal_delivery.consts.IntentCode.CHAVE_USUARIO;
+import static br.com.projeto.personal_delivery.consts.IntentCode.CHAVE_USUARIO_GOOGLE;
+import static br.com.projeto.personal_delivery.consts.IntentCode.RC_LOGIN;
 import static br.com.projeto.personal_delivery.utils.ValidaFormulario.ehValidoFormulario;
 
 public class LoginActivity extends AppCompatActivity {
 
     public static final String APPBAR_LOGIN = "Login";
-    public static final int RC_LOGIN = 1;
+
     private AutenticacaoGoogle autenticacaoGoogle;
 
     @Override
@@ -45,29 +43,26 @@ public class LoginActivity extends AppCompatActivity {
         irParaTelaCriaConta();
         irParaTelaRedefineSenha();
 
-      /*  GoogleSignInOptions gso = new GoogleSignInOptions.Builder(
-                GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.default_web_client_id))
-                .requestEmail()
-                .build();*/
+        configuraBotaLogaComGoogle();
 
-       // GoogleSignInClient client = GoogleSignIn.getClient(this, gso);
+        configuraBotaoLogaComEmailESenha();
 
+    }
 
+    private void configuraBotaoLogaComEmailESenha() {
+        Button btLoga = findViewById(R.id.btLogaConta);
+        btLoga.setOnClickListener(view -> {
+            logaConta();
+        });
+    }
 
+    private void configuraBotaLogaComGoogle() {
         Button btLogaContaGoogle = findViewById(R.id.btLogaContaGoogle);
         btLogaContaGoogle.setOnClickListener(view -> {
             autenticacaoGoogle.LogaContaGoogle((client, requestLogin) -> {
                 startActivityForResult(client, requestLogin);
             });
         });
-
-
-        Button btLoga = findViewById(R.id.btLogaConta);
-        btLoga.setOnClickListener(view -> {
-            logaConta();
-        });
-
     }
 
     @Override
@@ -77,11 +72,22 @@ public class LoginActivity extends AppCompatActivity {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             try {
                 GoogleSignInAccount conta = task.getResult(ApiException.class);
-                autenticacaoGoogle.AutenticaGoogle(conta.getIdToken());
+                FirebaseUser usuarioAtual = autenticacaoGoogle.AutenticaGoogle(conta.getIdToken());
+                enviaUsuarioGoogleParaTelaPrincipal(usuarioAtual);
+                //vaiParaMainActivity();
             } catch (ApiException e) {
                 Log.w("Erro ao logar", "onActivityResult: " + e.getMessage());
+
+            } catch (NullPointerException e) {
+                e.printStackTrace();
             }
         }
+    }
+
+    private void enviaUsuarioGoogleParaTelaPrincipal(FirebaseUser usuarioAtual) {
+        Intent intent = new Intent(this, PrincipalActivity.class);
+        intent.putExtra(CHAVE_USUARIO_GOOGLE, usuarioAtual);
+        startActivity(intent);
     }
 
     private void irParaTelaCriaConta() {
@@ -110,11 +116,13 @@ public class LoginActivity extends AppCompatActivity {
 
 
         try {
-            FirebaseUser usuarioAtenticado = new Autenticacao(this).
+            FirebaseUser usuarioAtual = new Autenticacao(this).
                     LogaConta(usuario.getEmail(), usuario.getSenha());
 
-            if (usuarioAtenticado.isEmailVerified())
-                vaiParaMainActivity();
+            if (usuarioAtual.isEmailVerified()) {
+
+                usuarioVaiParaTelaPrincipal(usuarioAtual);
+            }
 
         } catch (NullPointerException e) {
             Log.w("Email nao verificado", e.getMessage());
@@ -123,9 +131,11 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    private void vaiParaMainActivity() {
+    private void usuarioVaiParaTelaPrincipal(FirebaseUser usuarioAtual) {
 
-        startActivity(new Intent(this, PrincipalActivity.class));
+        Intent intent = new Intent(this, PrincipalActivity.class);
+        intent.putExtra(CHAVE_USUARIO, usuarioAtual);
+        startActivity(intent);
     }
 
     private Usuario preencheUsuario() {
@@ -145,20 +155,4 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
-   /* private void logaContaGoogle(String tokenId) {
-
-        AuthCredential credencial = GoogleAuthProvider.getCredential(tokenId, null);
-        FirebaseAuth auth = FirebaseAuth.getInstance();
-        auth.signInWithCredential(credencial).addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                Toast.makeText(this, "Deu boa", Toast.LENGTH_SHORT).show();
-                FirebaseUser currentUser = auth.getCurrentUser();
-                Toast.makeText(this, "user " + currentUser.getDisplayName(),
-                        Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(this, "Deu ruim" + task.getException().getMessage()
-                        , Toast.LENGTH_SHORT).show();
-            }
-        });
-    }*/
 }
