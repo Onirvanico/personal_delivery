@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/fundo_autenticacao"
     tools:context=".activities.RedefineSenhaActivity">
 
     <TextView
@@ -36,8 +37,9 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="70dp"
         android:onClick="redefinindoSenha"
-        android:background="@drawable/formato_campo"
+        android:background="@drawable/formato_botao"
         android:text="@string/bt_redefine_senha"
+        android:textColor="@android:color/background_light"
         app:layout_constraintEnd_toEndOf="@+id/input_email_redefine_senha"
         app:layout_constraintStart_toStartOf="@+id/input_email_redefine_senha"
         app:layout_constraintTop_toBottomOf="@+id/input_email_redefine_senha" />

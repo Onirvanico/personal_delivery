@@ -7,6 +7,8 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 import br.com.projeto.personal_delivery.R;
 import br.com.projeto.personal_delivery.auth.Autenticacao;
 import br.com.projeto.personal_delivery.model.Usuario;
@@ -16,6 +18,7 @@ public class CriaContaActivity extends AppCompatActivity {
 
 
     public static final String APPBAR_CRIACONTA = "Criar conta";
+    private FirebaseAuth auth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,7 +27,9 @@ public class CriaContaActivity extends AppCompatActivity {
 
         setTitle(APPBAR_CRIACONTA);
 
-        Button btCriaConta = findViewById(R.id.btLogaConta);
+        auth = FirebaseAuth.getInstance();
+
+        Button btCriaConta = findViewById(R.id.bt_cria_conta);
         btCriaConta.setOnClickListener(view -> {
             criaConta();
         });
@@ -37,7 +42,7 @@ public class CriaContaActivity extends AppCompatActivity {
 
         try {
             Usuario usuario = preencheUsuario();
-            Autenticacao autenticacao = new Autenticacao(this);
+            Autenticacao autenticacao = new Autenticacao(this, auth);
             autenticacao.criaConta(usuario.getEmail(), usuario.getSenha());
         } catch (NullPointerException e) {
             Log.e("Erro criar usuario ", e.getMessage() );
@@ -45,10 +50,10 @@ public class CriaContaActivity extends AppCompatActivity {
     }
 
     private Usuario preencheUsuario() {
-        TextView inputConfirmaSenha = findViewById(R.id.inputConfirmaSenha_login);
+        TextView inputConfirmaSenha = findViewById(R.id.input_confirma_senha_cria_conta);
 
-        TextView inputSenha = findViewById(R.id.inputSenha_login);
-        TextView inputEmail = findViewById(R.id.inputEmail_login);
+        TextView inputSenha = findViewById(R.id.input_senha_cria_conta);
+        TextView inputEmail = findViewById(R.id.input_email_cria_conta);
         String email = inputEmail.getText().toString();
         String senha = inputSenha.getText().toString();
         if(ValidaFormulario.ehValidoFormularioESenhaDeConfirmacao(inputEmail,

@@ -2,6 +2,8 @@ package br.com.projeto.personal_delivery.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,43 +21,37 @@ public class PrincipalActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_principal);
 
-        buscaUsuario();
+        FirebaseUser usuarioAtual = FirebaseAuth.getInstance().getCurrentUser();
+
+        buscaUsuario(usuarioAtual);
+
+        View sair = findViewById(R.id.btSair);
+        sair.setOnClickListener(view -> {
+          //  FirebaseAuth.getInstance().signOut();
+            finish();
+        });
 
     }
 
 
-    private void buscaUsuario() {
-        Intent intent = getIntent();
-        if (intent.hasExtra(CHAVE_USUARIO_GOOGLE)) {
-            setNomeUsuarioNaTela(intent, CHAVE_USUARIO_GOOGLE, "\\s+");
+    private void buscaUsuario(FirebaseUser usuarioAtual) {
 
-        } else if (intent.hasExtra(CHAVE_USUARIO)) {
-            setNomeUsuarioNaTela(intent, CHAVE_USUARIO, "\\u0020");
+        if(usuarioAtual != null) {
+            Log.i("principal_usuario ", usuarioAtual.getEmail());
+
+            TextView texto = findViewById(R.id.textTelaPrincipal);
+            String textoExistente = texto.getText().toString();
+            texto.setText(textoExistente + " " + usuarioAtual.getEmail());
+
         }
     }
 
-    private void setNomeUsuarioNaTela(Intent intent, String chaveUsuario, String s) {
-        FirebaseUser usuario = intent.getParcelableExtra(chaveUsuario);
-        String usuarioAtual = usuario.getDisplayName();
-        String[] nomeUsuario = usuarioAtual.split(s);
-        String primeiroNome = nomeUsuario[0];
-
-        TextView texto = findViewById(R.id.textTelaPrincipal);
-        String textoExistente = texto.getText().toString();
-        texto.setText(textoExistente + " " + primeiroNome);
-
-    }
 
     @Override
     protected void onStart() {
         super.onStart();
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-
-    }
 }

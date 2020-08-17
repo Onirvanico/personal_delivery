@@ -45,16 +45,11 @@ public class AutenticacaoGoogle {
         logar.tentaLogar(logaIntent, RC_LOGIN);
     }
 
-    public FirebaseUser AutenticaGoogle(String tokenId) {
+    public void AutenticaGoogle(String tokenId) {
 
         AuthCredential credencial = GoogleAuthProvider.getCredential(tokenId, null);
         FirebaseAuth auth = FirebaseAuth.getInstance();
-        FirebaseUser currentUser = auth.getCurrentUser();
-
         auth.signInWithCredential(credencial).addOnCompleteListener(this::naFinalizacaoDoLogin);
-
-        auth.signOut();
-        return currentUser;
     }
 
     private void naFinalizacaoDoLogin(Task<AuthResult> task) {

@@ -20,10 +20,11 @@ public class Autenticacao {
     public static final String PT_BR = "pt-br";
     private FirebaseAuth auth;
     private Context context;
+    private CallbackAutentica callback;
 
-    public Autenticacao(Context context) {
-        auth = FirebaseAuth.getInstance();
-        auth.setLanguageCode(PT_BR);
+    public Autenticacao(Context context, FirebaseAuth auth) {
+        this.auth = auth;
+        this.auth.setLanguageCode(PT_BR);
         this.context = context;
     }
 
@@ -33,11 +34,11 @@ public class Autenticacao {
                 .addOnCompleteListener((Activity) context, this::naFinalizacaoDaCriacaoDaConta);
     }
 
-    public FirebaseUser LogaConta(String email, String senha) {
+    public void logaConta(String email, String senha, CallbackAutentica callback) {
 
+        this.callback = callback;
         auth.signInWithEmailAndPassword(email, senha)
-                .addOnCompleteListener(this::naFinalizacaoDoLogin);
-        return auth.getCurrentUser();
+                .addOnCompleteListener((Activity) context, this::naFinalizacaoDoLogin);
     }
 
     public void redefineSenha(String email) {
@@ -59,20 +60,33 @@ public class Autenticacao {
 
     private void naFinalizacaoDoLogin(Task<AuthResult> task) {
         if (task.isSuccessful()) {
-            Log.i("Login ", "Logado com sucesso "
-                    + auth.getCurrentUser()
-                    .getEmail());
 
+            FirebaseUser user = auth.getCurrentUser();
 
-            if (!auth.getCurrentUser().isEmailVerified()) {
+            if (!user.isEmailVerified()) {
                 Toast.makeText(context,
                         "Confirme o cadastro enviado ao seu email", LENGTH_SHORT).show();
+
+            } else {
+                callback.teveSucesso(user);
+                Log.i("Login ", "Logado com sucesso "
+                        + user
+                        .getEmail());
+
+                Toast.makeText(context, "Usuário logado com sucesso", LENGTH_SHORT).show();
+               // Log.i("displayName ", user.getDisplayName() );
+                Log.i("getPhone", user.getEmail());
 
             }
 
         } else {
             FormularioException taskFormularioException = new FormularioException<Task<AuthResult>>();
             taskFormularioException.FalhaConexaoException(task, context);
+            taskFormularioException.UsuarioInvalidoException(task, context);
+            taskFormularioException.usuarioNaoCadastradoException(task, context);
+
+            callback.teveFalha(task.getException().getMessage());
+
             Log.i("LoginError ", "Erro de autenticação " + task.getException()
                     .getMessage());
         }
@@ -107,4 +121,10 @@ public class Autenticacao {
                     LENGTH_LONG).show();
         }
     }
+
+    public interface CallbackAutentica {
+        void teveSucesso(FirebaseUser user);
+        void teveFalha(String error);
+    }
+
 }

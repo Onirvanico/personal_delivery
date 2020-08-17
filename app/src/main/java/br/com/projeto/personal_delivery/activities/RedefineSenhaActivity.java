@@ -6,6 +6,8 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 import br.com.projeto.personal_delivery.R;
 import br.com.projeto.personal_delivery.auth.Autenticacao;
 import br.com.projeto.personal_delivery.utils.ValidaFormulario;
@@ -13,6 +15,7 @@ import br.com.projeto.personal_delivery.utils.ValidaFormulario;
 public class RedefineSenhaActivity extends AppCompatActivity {
 
     public static final String APPBAR_REDEFINIR_SENHA = "Redefinir Senha";
+    private FirebaseAuth auth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,6 +23,7 @@ public class RedefineSenhaActivity extends AppCompatActivity {
         setContentView(R.layout.activity_redefine_senha);
 
         setTitle(APPBAR_REDEFINIR_SENHA);
+        auth = FirebaseAuth.getInstance();
 
 
     }
@@ -30,7 +34,7 @@ public class RedefineSenhaActivity extends AppCompatActivity {
 
             if (!ValidaFormulario.ehCampoEmailVazio(inputEmail)) {
                 String email = inputEmail.getText().toString();
-                new Autenticacao(this).redefineSenha(email);
+                new Autenticacao(this, auth).redefineSenha(email);
 
             }
         }

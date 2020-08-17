@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,6 +13,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import br.com.projeto.personal_delivery.R;
@@ -21,8 +21,6 @@ import br.com.projeto.personal_delivery.auth.Autenticacao;
 import br.com.projeto.personal_delivery.auth.AutenticacaoGoogle;
 import br.com.projeto.personal_delivery.model.Usuario;
 
-import static br.com.projeto.personal_delivery.consts.IntentCode.CHAVE_USUARIO;
-import static br.com.projeto.personal_delivery.consts.IntentCode.CHAVE_USUARIO_GOOGLE;
 import static br.com.projeto.personal_delivery.consts.IntentCode.RC_LOGIN;
 import static br.com.projeto.personal_delivery.utils.ValidaFormulario.ehValidoFormulario;
 
@@ -31,6 +29,9 @@ public class LoginActivity extends AppCompatActivity {
     public static final String APPBAR_LOGIN = "Login";
 
     private AutenticacaoGoogle autenticacaoGoogle;
+    private Autenticacao autenticacao;
+
+    private FirebaseAuth auth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +39,9 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         setTitle(APPBAR_LOGIN);
 
+        auth = FirebaseAuth.getInstance();
         autenticacaoGoogle = new AutenticacaoGoogle(this);
+        autenticacao = new Autenticacao(this, auth);
 
         irParaTelaCriaConta();
         irParaTelaRedefineSenha();
@@ -50,8 +53,19 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void configuraBotaoLogaComEmailESenha() {
-        Button btLoga = findViewById(R.id.btLogaConta);
+        Button btLoga = findViewById(R.id.bt_entrar_login);
         btLoga.setOnClickListener(view -> {
+           /* auth.signInWithEmailAndPassword("cristianosantosesilva@gmail.com", "33142544" )
+                    .addOnCompleteListener(this, task -> {
+                        if (task.isSuccessful()) {
+                            Toast.makeText(this, "Usuário logado com sucesso",
+                                    LENGTH_LONG).show();
+                            usuarioVaiParaTelaPrincipal();
+                        } else {
+                            Toast.makeText(this, "Falha ao tentar logar",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    });*/
             logaConta();
         });
     }
@@ -60,7 +74,7 @@ public class LoginActivity extends AppCompatActivity {
         Button btLogaContaGoogle = findViewById(R.id.btLogaContaGoogle);
         btLogaContaGoogle.setOnClickListener(view -> {
             autenticacaoGoogle.LogaContaGoogle((client, requestLogin) -> {
-                startActivityForResult(client, requestLogin);
+              startActivityForResult(client, requestLogin);
             });
         });
     }
@@ -72,9 +86,9 @@ public class LoginActivity extends AppCompatActivity {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             try {
                 GoogleSignInAccount conta = task.getResult(ApiException.class);
-                FirebaseUser usuarioAtual = autenticacaoGoogle.AutenticaGoogle(conta.getIdToken());
-                enviaUsuarioGoogleParaTelaPrincipal(usuarioAtual);
-                //vaiParaMainActivity();
+                autenticacaoGoogle.AutenticaGoogle(conta.getIdToken());
+                usuarioVaiParaTelaPrincipal();
+
             } catch (ApiException e) {
                 Log.w("Erro ao logar", "onActivityResult: " + e.getMessage());
 
@@ -84,15 +98,9 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    private void enviaUsuarioGoogleParaTelaPrincipal(FirebaseUser usuarioAtual) {
-        Intent intent = new Intent(this, PrincipalActivity.class);
-        intent.putExtra(CHAVE_USUARIO_GOOGLE, usuarioAtual);
-        startActivity(intent);
-    }
-
     private void irParaTelaCriaConta() {
-        TextView linkTelaCriaConta = findViewById(R.id.textLinkTelaCriaConta);
-        linkTelaCriaConta.setOnClickListener(view -> {
+        TextView botaoTelaCriaConta = findViewById(R.id.bt_registrar);
+        botaoTelaCriaConta.setOnClickListener(view -> {
             startActivity(new Intent(this, CriaContaActivity.class));
         });
     }
@@ -100,9 +108,9 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-       /* FirebaseUser currentUser = auth.getCurrentUser();
+    /*    FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         if (currentUser != null)
-            vaiParaMainActivity();*/
+            usuarioVaiParaTelaPrincipal();*/
 
     }
 
@@ -115,32 +123,32 @@ public class LoginActivity extends AppCompatActivity {
     private void autenticaConta(Usuario usuario) {
 
 
-        try {
-            FirebaseUser usuarioAtual = new Autenticacao(this).
-                    LogaConta(usuario.getEmail(), usuario.getSenha());
 
-            if (usuarioAtual.isEmailVerified()) {
+                autenticacao.logaConta(usuario.getEmail(), usuario.getSenha(),
+                            new Autenticacao.CallbackAutentica() {
+                @Override
+                public void teveSucesso(FirebaseUser user) {
 
-                usuarioVaiParaTelaPrincipal(usuarioAtual);
-            }
+                    usuarioVaiParaTelaPrincipal();
+                }
 
-        } catch (NullPointerException e) {
-            Log.w("Email nao verificado", e.getMessage());
-            Toast.makeText(this, "usuário e/ou senha inválido",
-                    Toast.LENGTH_SHORT).show();
-        }
+                @Override
+                public void teveFalha(String error)  {
+                    Log.e("ExceptionLogin ", error );
+                }
+            });
+
     }
 
-    private void usuarioVaiParaTelaPrincipal(FirebaseUser usuarioAtual) {
+    private void usuarioVaiParaTelaPrincipal() {
 
         Intent intent = new Intent(this, PrincipalActivity.class);
-        intent.putExtra(CHAVE_USUARIO, usuarioAtual);
         startActivity(intent);
     }
 
     private Usuario preencheUsuario() {
-        TextView email = findViewById(R.id.inputEmail_login);
-        TextView senha = findViewById(R.id.inputSenha_login);
+        TextView email = findViewById(R.id.input_email_login);
+        TextView senha = findViewById(R.id.input_senha_login);
 
         if (ehValidoFormulario(email, senha))
             return new Usuario(email.getText().toString(), senha.getText().toString());
