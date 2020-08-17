@@ -6,6 +6,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseNetworkException;
+import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthInvalidUserException;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
@@ -14,7 +15,7 @@ import com.google.firebase.internal.api.FirebaseNoSignedInUserException;
 import static android.widget.Toast.LENGTH_LONG;
 import static android.widget.Toast.LENGTH_SHORT;
 
-public class FormularioException<T> {
+public class AuthException<T> {
 
     public void ConflitoEmailException(Task<T> task, Context context){
         try {
@@ -63,6 +64,17 @@ public class FormularioException<T> {
         } catch (FirebaseAuthInvalidUserException e) {
             Toast.makeText(context, "Este email não possui cadastro ", LENGTH_LONG).show();
 
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void falhaAutenticacaoUsuario(Task<T> task, Context context) {
+        try {
+            throw task.getException();
+
+        } catch (FirebaseAuthException e) {
+            Toast.makeText(context, "Falha ao tentar se autenticar", LENGTH_LONG).show();
         } catch (Exception e) {
             e.printStackTrace();
         }

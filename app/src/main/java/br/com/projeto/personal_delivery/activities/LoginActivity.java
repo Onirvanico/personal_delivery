@@ -2,8 +2,11 @@ package br.com.projeto.personal_delivery.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.AttributeSet;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -19,10 +22,13 @@ import com.google.firebase.auth.FirebaseUser;
 import br.com.projeto.personal_delivery.R;
 import br.com.projeto.personal_delivery.auth.Autenticacao;
 import br.com.projeto.personal_delivery.auth.AutenticacaoGoogle;
+import br.com.projeto.personal_delivery.auth.callback.CallbackAutentica;
 import br.com.projeto.personal_delivery.model.Usuario;
 
+import static android.view.View.INVISIBLE;
+import static android.view.View.VISIBLE;
 import static br.com.projeto.personal_delivery.consts.IntentCode.RC_LOGIN;
-import static br.com.projeto.personal_delivery.utils.ValidaFormulario.ehValidoFormulario;
+import static br.com.projeto.personal_delivery.utils.ValidaCampo.ehValidoFormulario;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -32,6 +38,8 @@ public class LoginActivity extends AppCompatActivity {
     private Autenticacao autenticacao;
 
     private FirebaseAuth auth;
+    private TextView linkTelaRedefineSenha;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,8 +48,10 @@ public class LoginActivity extends AppCompatActivity {
         setTitle(APPBAR_LOGIN);
 
         auth = FirebaseAuth.getInstance();
-        autenticacaoGoogle = new AutenticacaoGoogle(this);
+        autenticacaoGoogle = new AutenticacaoGoogle(this, auth);
         autenticacao = new Autenticacao(this, auth);
+
+        linkTelaRedefineSenha = findViewById(R.id.textLinkTelaAlteraSenha);
 
         irParaTelaCriaConta();
         irParaTelaRedefineSenha();
@@ -55,17 +65,7 @@ public class LoginActivity extends AppCompatActivity {
     private void configuraBotaoLogaComEmailESenha() {
         Button btLoga = findViewById(R.id.bt_entrar_login);
         btLoga.setOnClickListener(view -> {
-           /* auth.signInWithEmailAndPassword("cristianosantosesilva@gmail.com", "33142544" )
-                    .addOnCompleteListener(this, task -> {
-                        if (task.isSuccessful()) {
-                            Toast.makeText(this, "Usuário logado com sucesso",
-                                    LENGTH_LONG).show();
-                            usuarioVaiParaTelaPrincipal();
-                        } else {
-                            Toast.makeText(this, "Falha ao tentar logar",
-                                    Toast.LENGTH_SHORT).show();
-                        }
-                    });*/
+            habilitaProgressBar();
             logaConta();
         });
     }
@@ -74,9 +74,19 @@ public class LoginActivity extends AppCompatActivity {
         Button btLogaContaGoogle = findViewById(R.id.btLogaContaGoogle);
         btLogaContaGoogle.setOnClickListener(view -> {
             autenticacaoGoogle.LogaContaGoogle((client, requestLogin) -> {
-              startActivityForResult(client, requestLogin);
+
+                habilitaProgressBar();
+
+                startActivityForResult(client, requestLogin);
+
             });
         });
+    }
+
+    private void habilitaProgressBar() {
+        linkTelaRedefineSenha.setVisibility(INVISIBLE);
+        progressBar = findViewById(R.id.progress_bar_login);
+        progressBar.setVisibility(VISIBLE);
     }
 
     @Override
@@ -86,8 +96,19 @@ public class LoginActivity extends AppCompatActivity {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             try {
                 GoogleSignInAccount conta = task.getResult(ApiException.class);
-                autenticacaoGoogle.AutenticaGoogle(conta.getIdToken());
-                usuarioVaiParaTelaPrincipal();
+                autenticacaoGoogle.AutenticaGoogle(conta.getIdToken(), new CallbackAutentica() {
+                    @Override
+                    public void teveSucesso(FirebaseUser user) {
+                        usuarioVaiParaTelaPrincipal();
+                        //finish();
+                    }
+
+                    @Override
+                    public void teveFalha(String error) {
+                        Log.w("Falha conta google", "teveFalha: " + error);
+                    }
+                });
+
 
             } catch (ApiException e) {
                 Log.w("Erro ao logar", "onActivityResult: " + e.getMessage());
@@ -96,6 +117,11 @@ public class LoginActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
+    }
+
+    private void desabilitaProgressBar() {
+        linkTelaRedefineSenha.setVisibility(VISIBLE);
+        progressBar.setVisibility(INVISIBLE);
     }
 
     private void irParaTelaCriaConta() {
@@ -108,9 +134,10 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-    /*    FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-        if (currentUser != null)
-            usuarioVaiParaTelaPrincipal();*/
+
+        FirebaseUser user = auth.getCurrentUser();
+        if (user != null)
+            usuarioVaiParaTelaPrincipal();
 
     }
 
@@ -122,22 +149,19 @@ public class LoginActivity extends AppCompatActivity {
 
     private void autenticaConta(Usuario usuario) {
 
+        autenticacao.logaConta(usuario.getEmail(), usuario.getSenha(),
+                    new CallbackAutentica() {
+                    @Override
+                    public void teveSucesso(FirebaseUser user) {
 
+                        usuarioVaiParaTelaPrincipal();
+                    }
 
-                autenticacao.logaConta(usuario.getEmail(), usuario.getSenha(),
-                            new Autenticacao.CallbackAutentica() {
-                @Override
-                public void teveSucesso(FirebaseUser user) {
-
-                    usuarioVaiParaTelaPrincipal();
-                }
-
-                @Override
-                public void teveFalha(String error)  {
-                    Log.e("ExceptionLogin ", error );
-                }
-            });
-
+                    @Override
+                    public void teveFalha(String error) {
+                        Log.e("ExceptionLogin ", error);
+                    }
+                });
     }
 
     private void usuarioVaiParaTelaPrincipal() {
@@ -157,10 +181,13 @@ public class LoginActivity extends AppCompatActivity {
 
 
     private void irParaTelaRedefineSenha() {
-        TextView linkTelaRedefineSenha = findViewById(R.id.textLinkTelaAlteraSenha);
         linkTelaRedefineSenha.setOnClickListener(view -> startActivity(
                 new Intent(this, RedefineSenhaActivity.class)));
-
     }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        desabilitaProgressBar();
+    }
 }

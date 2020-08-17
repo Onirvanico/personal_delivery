@@ -10,7 +10,8 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-import br.com.projeto.personal_delivery.exceptions.FormularioException;
+import br.com.projeto.personal_delivery.auth.callback.CallbackAutentica;
+import br.com.projeto.personal_delivery.exceptions.AuthException;
 
 import static android.widget.Toast.LENGTH_LONG;
 import static android.widget.Toast.LENGTH_SHORT;
@@ -28,7 +29,9 @@ public class Autenticacao {
         this.context = context;
     }
 
-    public void criaConta(String email, String senha) {
+    public void criaConta(String email, String senha, CallbackAutentica callback) {
+
+        this.callback = callback;
 
         auth.createUserWithEmailAndPassword(email, senha)
                 .addOnCompleteListener((Activity) context, this::naFinalizacaoDaCriacaoDaConta);
@@ -37,6 +40,7 @@ public class Autenticacao {
     public void logaConta(String email, String senha, CallbackAutentica callback) {
 
         this.callback = callback;
+
         auth.signInWithEmailAndPassword(email, senha)
                 .addOnCompleteListener((Activity) context, this::naFinalizacaoDoLogin);
     }
@@ -80,10 +84,10 @@ public class Autenticacao {
             }
 
         } else {
-            FormularioException taskFormularioException = new FormularioException<Task<AuthResult>>();
-            taskFormularioException.FalhaConexaoException(task, context);
-            taskFormularioException.UsuarioInvalidoException(task, context);
-            taskFormularioException.usuarioNaoCadastradoException(task, context);
+            AuthException taskAuthException = new AuthException<Task<AuthResult>>();
+            taskAuthException.FalhaConexaoException(task, context);
+            taskAuthException.UsuarioInvalidoException(task, context);
+            taskAuthException.usuarioNaoCadastradoException(task, context);
 
             callback.teveFalha(task.getException().getMessage());
 
@@ -96,13 +100,18 @@ public class Autenticacao {
         if (task.isSuccessful()) {
             verificaEmail();
             Log.i("Conta ", "Conta criada com êxito");
-            FirebaseUser currentUser = auth.getCurrentUser();
-            Toast.makeText(context, currentUser.getEmail(), LENGTH_LONG).show();
+            FirebaseUser user = auth.getCurrentUser();
+
+            callback.teveSucesso(user);
+
+            Toast.makeText(context, user.getEmail(), LENGTH_LONG).show();
 
         } else {
-            FormularioException formularioException = new FormularioException<Task<AuthResult>>();
-            formularioException.ConflitoEmailException(task, context);
-            formularioException.FalhaConexaoException(task, context);
+            AuthException authException = new AuthException<Task<AuthResult>>();
+            authException.ConflitoEmailException(task, context);
+            authException.FalhaConexaoException(task, context);
+
+            callback.teveFalha(task.getException().getMessage());
 
             Log.w("Conta ", "Falha ao criar conta: "
                     + task.getException().getMessage());
@@ -114,17 +123,13 @@ public class Autenticacao {
             Toast.makeText(context, "Email enviado para redefinição de sua senha",
                     LENGTH_SHORT).show();
         } else {
-            FormularioException formularioException = new FormularioException<Task<Void>>();
-            formularioException.FalhaConexaoException(task, context);
+            AuthException authException = new AuthException<Task<Void>>();
+            authException.FalhaConexaoException(task, context);
             Toast.makeText(context, "Não foi possível enviar link para redefinir senha com " +
                             "o endereço informado",
                     LENGTH_LONG).show();
         }
     }
 
-    public interface CallbackAutentica {
-        void teveSucesso(FirebaseUser user);
-        void teveFalha(String error);
-    }
 
 }

@@ -12,7 +12,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import br.com.projeto.personal_delivery.R;
 import br.com.projeto.personal_delivery.auth.Autenticacao;
 import br.com.projeto.personal_delivery.model.Usuario;
-import br.com.projeto.personal_delivery.utils.ValidaFormulario;
+import br.com.projeto.personal_delivery.utils.ValidaCampo;
 
 public class CriaContaActivity extends AppCompatActivity {
 
@@ -56,7 +56,7 @@ public class CriaContaActivity extends AppCompatActivity {
         TextView inputEmail = findViewById(R.id.input_email_cria_conta);
         String email = inputEmail.getText().toString();
         String senha = inputSenha.getText().toString();
-        if(ValidaFormulario.ehValidoFormularioESenhaDeConfirmacao(inputEmail,
+        if(ValidaCampo.ehValidoFormularioESenhaDeConfirmacao(inputEmail,
                 inputSenha,
                 inputConfirmaSenha)) {
 

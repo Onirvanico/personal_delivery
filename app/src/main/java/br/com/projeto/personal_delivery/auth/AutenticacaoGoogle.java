@@ -15,16 +15,22 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
 import br.com.projeto.personal_delivery.R;
+import br.com.projeto.personal_delivery.auth.callback.CallbackAutentica;
+import br.com.projeto.personal_delivery.exceptions.AuthException;
 
 import static br.com.projeto.personal_delivery.consts.IntentCode.RC_LOGIN;
 
-public class AutenticacaoGoogle {
+public class AutenticacaoGoogle  {
 
+    private CallbackAutentica callbackAutentica;
     private Context context;
+    private FirebaseAuth auth;
     private GoogleSignInClient client;
 
-    public AutenticacaoGoogle(Context context) {
+    public AutenticacaoGoogle(Context context, FirebaseAuth auth) {
+
         this.context = context;
+        this.auth = auth;
         configuraLoginGoogle(context);
     }
 
@@ -45,22 +51,30 @@ public class AutenticacaoGoogle {
         logar.tentaLogar(logaIntent, RC_LOGIN);
     }
 
-    public void AutenticaGoogle(String tokenId) {
+    public void AutenticaGoogle(String tokenId, CallbackAutentica callback) {
+
+        this.callbackAutentica = callback;
 
         AuthCredential credencial = GoogleAuthProvider.getCredential(tokenId, null);
-        FirebaseAuth auth = FirebaseAuth.getInstance();
         auth.signInWithCredential(credencial).addOnCompleteListener(this::naFinalizacaoDoLogin);
     }
 
     private void naFinalizacaoDoLogin(Task<AuthResult> task) {
         if (task.isSuccessful()) {
-            Toast.makeText(context, "Deu boa", Toast.LENGTH_SHORT).show();
+            FirebaseUser user = auth.getCurrentUser();
+            Toast.makeText(context, "Usuário com credencial aceita", Toast.LENGTH_SHORT).show();
+            callbackAutentica.teveSucesso(user);
 
         } else {
-            Toast.makeText(context, "Deu ruim" + task.getException().getMessage()
-                    , Toast.LENGTH_SHORT).show();
+            AuthException taskAuthException = new AuthException<Task<AuthResult>>();
+            taskAuthException.FalhaConexaoException(task, context);
+            taskAuthException.falhaAutenticacaoUsuario(task, context);
+
+            callbackAutentica.teveFalha(task.getException().getMessage());
+
         }
     }
+
 
     public interface Logar {
         void tentaLogar(Intent client, int requestLogin);

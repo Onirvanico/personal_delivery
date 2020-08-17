@@ -2,7 +2,7 @@ package br.com.projeto.personal_delivery.utils;
 
 import android.widget.TextView;
 
-public class ValidaFormulario {
+public class ValidaCampo {
 
     public static boolean ehValidoFormularioESenhaDeConfirmacao(TextView email,
                                                                 TextView senha,

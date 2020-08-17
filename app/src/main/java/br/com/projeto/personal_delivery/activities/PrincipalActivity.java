@@ -1,6 +1,5 @@
 package br.com.projeto.personal_delivery.activities;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -12,9 +11,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import br.com.projeto.personal_delivery.R;
-
-import static br.com.projeto.personal_delivery.consts.IntentCode.CHAVE_USUARIO;
-import static br.com.projeto.personal_delivery.consts.IntentCode.CHAVE_USUARIO_GOOGLE;
 
 public class PrincipalActivity extends AppCompatActivity {
 
@@ -29,7 +25,7 @@ public class PrincipalActivity extends AppCompatActivity {
 
         View sair = findViewById(R.id.btSair);
         sair.setOnClickListener(view -> {
-          //  FirebaseAuth.getInstance().signOut();
+            FirebaseAuth.getInstance().signOut();
             finish();
         });
 
@@ -48,10 +44,5 @@ public class PrincipalActivity extends AppCompatActivity {
         }
     }
 
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-    }
 
 }

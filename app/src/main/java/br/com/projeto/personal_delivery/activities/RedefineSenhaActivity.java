@@ -10,7 +10,7 @@ import com.google.firebase.auth.FirebaseAuth;
 
 import br.com.projeto.personal_delivery.R;
 import br.com.projeto.personal_delivery.auth.Autenticacao;
-import br.com.projeto.personal_delivery.utils.ValidaFormulario;
+import br.com.projeto.personal_delivery.utils.ValidaCampo;
 
 public class RedefineSenhaActivity extends AppCompatActivity {
 
@@ -32,7 +32,7 @@ public class RedefineSenhaActivity extends AppCompatActivity {
         if (view.getId() == R.id.bt_redefine_senha) {
             TextView inputEmail = findViewById(R.id.input_email_redefine_senha);
 
-            if (!ValidaFormulario.ehCampoEmailVazio(inputEmail)) {
+            if (!ValidaCampo.ehCampoEmailVazio(inputEmail)) {
                 String email = inputEmail.getText().toString();
                 new Autenticacao(this, auth).redefineSenha(email);
 
