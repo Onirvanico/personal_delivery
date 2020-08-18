@@ -125,6 +125,7 @@ public class Autenticacao {
         } else {
             AuthException authException = new AuthException<Task<Void>>();
             authException.FalhaConexaoException(task, context);
+
             Toast.makeText(context, "Não foi possível enviar link para redefinir senha com " +
                             "o endereço informado",
                     LENGTH_LONG).show();

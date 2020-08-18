@@ -65,7 +65,6 @@ public class LoginActivity extends AppCompatActivity {
     private void configuraBotaoLogaComEmailESenha() {
         Button btLoga = findViewById(R.id.bt_entrar_login);
         btLoga.setOnClickListener(view -> {
-            habilitaProgressBar();
             logaConta();
         });
     }
@@ -74,20 +73,13 @@ public class LoginActivity extends AppCompatActivity {
         Button btLogaContaGoogle = findViewById(R.id.btLogaContaGoogle);
         btLogaContaGoogle.setOnClickListener(view -> {
             autenticacaoGoogle.LogaContaGoogle((client, requestLogin) -> {
-
                 habilitaProgressBar();
-
                 startActivityForResult(client, requestLogin);
 
             });
         });
     }
 
-    private void habilitaProgressBar() {
-        linkTelaRedefineSenha.setVisibility(INVISIBLE);
-        progressBar = findViewById(R.id.progress_bar_login);
-        progressBar.setVisibility(VISIBLE);
-    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -100,12 +92,14 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void teveSucesso(FirebaseUser user) {
                         usuarioVaiParaTelaPrincipal();
-                        //finish();
+                        finish();
+                        desabilitaProgressBar();
                     }
 
                     @Override
                     public void teveFalha(String error) {
                         Log.w("Falha conta google", "teveFalha: " + error);
+                        desabilitaProgressBar();
                     }
                 });
 
@@ -119,7 +113,14 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
+    private void habilitaProgressBar() {
+        linkTelaRedefineSenha.setVisibility(INVISIBLE);
+        progressBar = findViewById(R.id.progress_bar_login);
+        progressBar.setVisibility(VISIBLE);
+    }
+
     private void desabilitaProgressBar() {
+        if(!linkTelaRedefineSenha.isShown() && !progressBar.isShown())
         linkTelaRedefineSenha.setVisibility(VISIBLE);
         progressBar.setVisibility(INVISIBLE);
     }
@@ -136,7 +137,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onStart();
 
         FirebaseUser user = auth.getCurrentUser();
-        if (user != null)
+        if (user != null && user.isEmailVerified())
             usuarioVaiParaTelaPrincipal();
 
     }
@@ -149,19 +150,25 @@ public class LoginActivity extends AppCompatActivity {
 
     private void autenticaConta(Usuario usuario) {
 
+        habilitaProgressBar();
+
         autenticacao.logaConta(usuario.getEmail(), usuario.getSenha(),
                     new CallbackAutentica() {
                     @Override
                     public void teveSucesso(FirebaseUser user) {
-
+                        habilitaProgressBar();
                         usuarioVaiParaTelaPrincipal();
+                        finish();
+                        desabilitaProgressBar();
                     }
 
                     @Override
                     public void teveFalha(String error) {
                         Log.e("ExceptionLogin ", error);
+                        desabilitaProgressBar();
                     }
                 });
+
     }
 
     private void usuarioVaiParaTelaPrincipal() {
@@ -185,9 +192,4 @@ public class LoginActivity extends AppCompatActivity {
                 new Intent(this, RedefineSenhaActivity.class)));
     }
 
-    @Override
-    protected void onStop() {
-        super.onStop();
-        desabilitaProgressBar();
-    }
 }
