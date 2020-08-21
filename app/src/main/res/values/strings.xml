@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">personal_delivery</string>
     <string name="informativo_redefinicao_senha">Informe seu email abaixo e receba um link de redefinição de senha:</string>
+    <string name="ratificar_verificacao_email">É necessário verificar o email enviado para acessar sua conta</string>
     <string name="input_email">Insira seu email aqui </string>
     <string name="bt_redefine_senha">Redefinir Senha</string>
 </resources>

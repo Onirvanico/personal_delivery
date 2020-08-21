@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activities.EntradaActivity"
+    android:background="@drawable/fundo_tela_entrada">
+
+    <TextView
+        android:id="@+id/texto_activity_entrada"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Encontre um personal trainer mais próximo de você"
+        android:textColor="@android:color/background_light"
+        android:minLines="7"
+        android:textSize="30sp"
+        android:lineSpacingExtra="5dp"
+        android:layout_marginTop="10dp"
+        android:gravity="center_vertical"
+        android:layout_marginLeft="80dp"
+        android:layout_marginRight="80dp"
+        android:padding="10dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/bt_entrar_login_activity_entrada"/>
+
+    <Button
+        android:id="@+id/bt_entrar_login_activity_entrada"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Já tenho conta"
+        android:textColor="@android:color/background_light"
+        android:background="@drawable/formato_botao"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/texto_activity_entrada"
+        android:layout_marginRight="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="30dp"
+        android:autofillHints=""
+        />
+        <Button
+        android:id="@+id/bt_entrar_cria_conta_activity_entrada"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Registrar-me"
+        android:textColor="@android:color/background_light"
+        android:background="@drawable/formato_botao"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/bt_entrar_login_activity_entrada"
+        android:layout_marginRight="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="4dp"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:autofillHints=""
+        android:drawableStart="@android:drawable/ic_dialog_info"
+        android:drawableLeft="@android:drawable/btn_plus"
+        android:drawablePadding="10dp"
+        android:gravity="center_vertical"
+        android:text="Nossas políticas de uso"
+        android:textColor="@android:color/background_light"
+        app:layout_constraintEnd_toEndOf="@id/bt_entrar_cria_conta_activity_entrada"
+        app:layout_constraintStart_toStartOf="@+id/bt_entrar_cria_conta_activity_entrada"
+        app:layout_constraintTop_toBottomOf="@+id/bt_entrar_cria_conta_activity_entrada" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

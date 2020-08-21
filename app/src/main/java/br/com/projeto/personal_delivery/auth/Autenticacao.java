@@ -78,7 +78,7 @@ public class Autenticacao {
                         .getEmail());
 
                 Toast.makeText(context, "Usuário logado com sucesso", LENGTH_SHORT).show();
-               // Log.i("displayName ", user.getDisplayName() );
+
                 Log.i("getPhone", user.getEmail());
 
             }

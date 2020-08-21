@@ -2,9 +2,7 @@ package br.com.projeto.personal_delivery.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.AttributeSet;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -16,6 +14,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.snackbar.BaseTransientBottomBar;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -29,6 +29,7 @@ import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
 import static br.com.projeto.personal_delivery.consts.IntentCode.RC_LOGIN;
 import static br.com.projeto.personal_delivery.utils.ValidaCampo.ehValidoFormulario;
+import static com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_LONG;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -47,18 +48,19 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         setTitle(APPBAR_LOGIN);
 
+        progressBar = findViewById(R.id.progress_bar_login);
         auth = FirebaseAuth.getInstance();
         autenticacaoGoogle = new AutenticacaoGoogle(this, auth);
         autenticacao = new Autenticacao(this, auth);
 
         linkTelaRedefineSenha = findViewById(R.id.textLinkTelaAlteraSenha);
 
-        irParaTelaCriaConta();
         irParaTelaRedefineSenha();
 
         configuraBotaLogaComGoogle();
 
         configuraBotaoLogaComEmailESenha();
+
 
     }
 
@@ -115,22 +117,15 @@ public class LoginActivity extends AppCompatActivity {
 
     private void habilitaProgressBar() {
         linkTelaRedefineSenha.setVisibility(INVISIBLE);
-        progressBar = findViewById(R.id.progress_bar_login);
         progressBar.setVisibility(VISIBLE);
     }
 
     private void desabilitaProgressBar() {
-        if(!linkTelaRedefineSenha.isShown() && !progressBar.isShown())
         linkTelaRedefineSenha.setVisibility(VISIBLE);
         progressBar.setVisibility(INVISIBLE);
+
     }
 
-    private void irParaTelaCriaConta() {
-        TextView botaoTelaCriaConta = findViewById(R.id.bt_registrar);
-        botaoTelaCriaConta.setOnClickListener(view -> {
-            startActivity(new Intent(this, CriaContaActivity.class));
-        });
-    }
 
     @Override
     protected void onStart() {
@@ -153,7 +148,7 @@ public class LoginActivity extends AppCompatActivity {
         habilitaProgressBar();
 
         autenticacao.logaConta(usuario.getEmail(), usuario.getSenha(),
-                    new CallbackAutentica() {
+                new CallbackAutentica() {
                     @Override
                     public void teveSucesso(FirebaseUser user) {
                         habilitaProgressBar();

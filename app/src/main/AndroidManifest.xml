@@ -11,9 +11,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activities.RedefineSenhaActivity"></activity>
+        <activity android:name=".activities.EntradaActivity" android:theme=
+            "@style/Theme.AppCompat.NoActionBar"></activity>
+        <activity android:name=".activities.LoginActivity" />
+        <activity android:name=".activities.RedefineSenhaActivity" />
         <activity android:name=".activities.PrincipalActivity" />
-        <activity android:name=".activities.LoginActivity">
+        <activity
+            android:name=".activities.SplashScreenActivity"
+            android:theme="@style/AppThemeTelaCheia">
             <intent-filter>
                 <category android:name="android.intent.category.LAUNCHER" />
 

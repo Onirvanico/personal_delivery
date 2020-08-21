@@ -10,6 +10,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -23,12 +24,16 @@ public class CriaContaActivity extends AppCompatActivity {
 
 
     public static final String APPBAR_CRIACONTA = "Criar conta";
+    public static final String INFO_VERIFICA_EMAIL = "Foi enviado um email para o endereço cadastrado." +
+        "Verifique sua caixa de mensagens e o valide, depois aperte ok e vá para tela de login";
+
     private FirebaseAuth auth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cria_conta);
+
 
         setTitle(APPBAR_CRIACONTA);
 
@@ -51,7 +56,7 @@ public class CriaContaActivity extends AppCompatActivity {
             autenticacao.criaConta(usuario.getEmail(), usuario.getSenha(), new CallbackAutentica() {
                 @Override
                 public void teveSucesso(FirebaseUser user) {
-                    enviaAlertaConfirmacaoSenha();
+                    enviaMensagemConfirmacaoSenha();
                 }
 
                 @Override
@@ -64,18 +69,17 @@ public class CriaContaActivity extends AppCompatActivity {
         }
     }
 
-    private void enviaAlertaConfirmacaoSenha() {
+    private void enviaMensagemConfirmacaoSenha() {
         new AlertDialog.Builder(CriaContaActivity.this)
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .setTitle("Validar cadastro")
-                .setMessage("Seu endereço de email já foi confirmado?")
-                .setPositiveButton("sim", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        startActivity(new Intent(CriaContaActivity.this,
-                                LoginActivity.class));
-                    }
-                }).setNegativeButton("não", null)
+                .setMessage(INFO_VERIFICA_EMAIL)
+                .setPositiveButton("ok", this::vaiParaTelaLogin)
+                .setNegativeButton("sair", (dialog, which) -> Snackbar.make(findViewById(R.id.meu_coordinator),
+                        R.string.ratificar_verificacao_email,
+                        Snackbar.LENGTH_LONG)
+                        .setDuration(5000)
+                        .show())
                 .create()
                 .show();
     }
@@ -98,4 +102,9 @@ public class CriaContaActivity extends AppCompatActivity {
     }
 
 
+    private void vaiParaTelaLogin(DialogInterface dialog, int which) {
+        startActivity(new Intent(CriaContaActivity.this,
+                LoginActivity.class));
+        finish();
+    }
 }

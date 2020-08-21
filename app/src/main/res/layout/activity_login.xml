@@ -29,26 +29,14 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:layout_marginRight="10dp"
             android:background="@drawable/formato_botao"
             android:text="Entrar"
             android:textColor="@android:color/background_light"
             android:textStyle="bold"
             app:layout_constraintLeft_toLeftOf="@id/input_senha_login"
-            app:layout_constraintRight_toLeftOf="@id/bt_registrar"
+            app:layout_constraintRight_toRightOf="@id/input_senha_login"
             app:layout_constraintTop_toBottomOf="@+id/input_senha_login" />
 
-        <Button
-            android:id="@+id/bt_registrar"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:background="@drawable/formato_botao"
-            android:text="Registrar-se"
-            android:textColor="@android:color/background_light"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="@id/input_senha_login"
-            app:layout_constraintStart_toEndOf="@+id/bt_entrar_login"
-            app:layout_constraintTop_toTopOf="@id/bt_entrar_login" />
 
         <EditText
             android:id="@+id/input_senha_login"
@@ -96,9 +84,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
-            android:text="Esqueci minha senha"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:text="Esqueceu sua senha?"
             android:textColor="@android:color/background_dark"
-            android:textSize="20sp"
+            android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/bt_entrar_login" />
@@ -110,7 +100,7 @@
             android:visibility="invisible"
             app:layout_constraintTop_toBottomOf ="@+id/bt_entrar_login"
             app:layout_constraintStart_toStartOf="@id/bt_entrar_login"
-            app:layout_constraintEnd_toEndOf="@id/bt_registrar"
+            app:layout_constraintEnd_toEndOf="@id/bt_entrar_login"
             android:layout_marginTop="10dp"
             />
 
