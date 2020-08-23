@@ -28,7 +28,6 @@ public class AutenticacaoGoogle  {
     private GoogleSignInClient client;
 
     public AutenticacaoGoogle(Context context, FirebaseAuth auth) {
-
         this.context = context;
         this.auth = auth;
         configuraLoginGoogle(context);
@@ -45,14 +44,11 @@ public class AutenticacaoGoogle  {
 
 
     public void LogaContaGoogle(Logar logar ) {
-
-
         Intent logaIntent = client.getSignInIntent();
         logar.tentaLogar(logaIntent, RC_LOGIN);
     }
 
     public void AutenticaGoogle(String tokenId, CallbackAutentica callback) {
-
         this.callbackAutentica = callback;
 
         AuthCredential credencial = GoogleAuthProvider.getCredential(tokenId, null);

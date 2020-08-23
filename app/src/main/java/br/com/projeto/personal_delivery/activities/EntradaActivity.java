@@ -8,6 +8,8 @@ import android.view.View;
 import android.widget.Button;
 
 import br.com.projeto.personal_delivery.R;
+import br.com.projeto.personal_delivery.activities.auth_activities.CriaContaActivity;
+import br.com.projeto.personal_delivery.activities.auth_activities.LoginActivity;
 
 public class EntradaActivity extends AppCompatActivity {
 
@@ -35,9 +37,11 @@ public class EntradaActivity extends AppCompatActivity {
 
     private void vaiParaCriaConta(View view) {
         startActivity(new Intent(this, CriaContaActivity.class));
+        finish();
     }
 
     private void vaiParaLogin(View view) {
         startActivity(new Intent(this, LoginActivity.class));
+        finish();
     }
 }

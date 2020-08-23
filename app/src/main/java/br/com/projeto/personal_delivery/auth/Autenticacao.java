@@ -57,7 +57,8 @@ public class Autenticacao {
             if (task.isSuccessful()) {
                 Toast.makeText(context, "Email de verificação enviado", LENGTH_LONG).show();
             } else {
-                Log.w("Verifica email ", "Erro ao enviar email de verificação " + task.getException().getMessage());
+                Log.w("Verifica email ", "Erro ao enviar email de verificação "
+                        + task.getException().getMessage());
             }
         });
     }
@@ -77,7 +78,7 @@ public class Autenticacao {
                         + user
                         .getEmail());
 
-                Toast.makeText(context, "Usuário logado com sucesso", LENGTH_SHORT).show();
+               // Toast.makeText(context, "Usuário logado com sucesso", LENGTH_SHORT).show();
 
                 Log.i("getPhone", user.getEmail());
 

@@ -1,4 +1,4 @@
-package br.com.projeto.personal_delivery.activities;
+package br.com.projeto.personal_delivery.activities.auth_activities;
 
 import android.os.Bundle;
 import android.view.View;

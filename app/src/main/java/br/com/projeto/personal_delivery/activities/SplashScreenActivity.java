@@ -17,10 +17,11 @@ public class SplashScreenActivity extends AppCompatActivity {
 
         Handler handler = new Handler();
         handler.postDelayed(this::mostraInicio, 3000);
-
     }
 
     private void mostraInicio() {
         startActivity(new Intent(this, EntradaActivity.class));
+        finish();
+
     }
 }

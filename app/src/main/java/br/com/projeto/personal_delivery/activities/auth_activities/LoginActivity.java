@@ -1,4 +1,4 @@
-package br.com.projeto.personal_delivery.activities;
+package br.com.projeto.personal_delivery.activities.auth_activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,12 +14,11 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
-import com.google.android.material.snackbar.BaseTransientBottomBar;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import br.com.projeto.personal_delivery.R;
+import br.com.projeto.personal_delivery.activities.PrincipalActivity;
 import br.com.projeto.personal_delivery.auth.Autenticacao;
 import br.com.projeto.personal_delivery.auth.AutenticacaoGoogle;
 import br.com.projeto.personal_delivery.auth.callback.CallbackAutentica;
@@ -29,7 +28,7 @@ import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
 import static br.com.projeto.personal_delivery.consts.IntentCode.RC_LOGIN;
 import static br.com.projeto.personal_delivery.utils.ValidaCampo.ehValidoFormulario;
-import static com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_LONG;
+
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -86,6 +85,10 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        acessaContaGoogle(requestCode, data);
+    }
+
+    private void acessaContaGoogle(int requestCode, @Nullable Intent data) {
         if (requestCode == RC_LOGIN) {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             try {
@@ -153,8 +156,8 @@ public class LoginActivity extends AppCompatActivity {
                     public void teveSucesso(FirebaseUser user) {
                         habilitaProgressBar();
                         usuarioVaiParaTelaPrincipal();
-                        finish();
                         desabilitaProgressBar();
+                        finish();
                     }
 
                     @Override
@@ -162,6 +165,7 @@ public class LoginActivity extends AppCompatActivity {
                         Log.e("ExceptionLogin ", error);
                         desabilitaProgressBar();
                     }
+
                 });
 
     }
