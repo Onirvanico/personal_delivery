@@ -154,10 +154,14 @@ public class LoginActivity extends AppCompatActivity {
                 new CallbackAutentica() {
                     @Override
                     public void teveSucesso(FirebaseUser user) {
+                        if(user.isEmailVerified()) {
+                            habilitaProgressBar();
+                            usuarioVaiParaTelaPrincipal();
+                            finish();
+                        }
+
                         habilitaProgressBar();
-                        usuarioVaiParaTelaPrincipal();
                         desabilitaProgressBar();
-                        finish();
                     }
 
                     @Override

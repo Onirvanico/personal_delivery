@@ -71,6 +71,7 @@ public class Autenticacao {
             if (!user.isEmailVerified()) {
                 Toast.makeText(context,
                         "Confirme o cadastro enviado ao seu email", LENGTH_SHORT).show();
+                callback.teveSucesso(user);
 
             } else {
                 callback.teveSucesso(user);
@@ -78,7 +79,7 @@ public class Autenticacao {
                         + user
                         .getEmail());
 
-               // Toast.makeText(context, "Usuário logado com sucesso", LENGTH_SHORT).show();
+                Toast.makeText(context, "Usuário logado com sucesso", LENGTH_SHORT).show();
 
                 Log.i("getPhone", user.getEmail());
 
