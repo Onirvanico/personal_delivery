@@ -53,14 +53,7 @@ public class Autenticacao {
 
     private void verificaEmail() {
         FirebaseUser user = auth.getCurrentUser();
-        user.sendEmailVerification().addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                Toast.makeText(context, "Email de verificação enviado", LENGTH_LONG).show();
-            } else {
-                Log.w("Verifica email ", "Erro ao enviar email de verificação "
-                        + task.getException().getMessage());
-            }
-        });
+        user.sendEmailVerification().addOnCompleteListener(this::naVerificacao);
     }
 
     private void naFinalizacaoDoLogin(Task<AuthResult> task) {
@@ -135,4 +128,12 @@ public class Autenticacao {
     }
 
 
+    private void naVerificacao(Task<Void> task) {
+        if (task.isSuccessful()) {
+            Toast.makeText(context, "Email de verificação enviado", LENGTH_LONG).show();
+        } else {
+            Log.w("Verifica email ", "Erro ao enviar email de verificação "
+                    + task.getException().getMessage());
+        }
+    }
 }

@@ -11,11 +11,16 @@
         android:roundIcon="@mipmap/apresentacao_app"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activities.auth_activities.CriaContaActivity"/>
-        <activity android:name=".activities.auth_activities.LoginActivity"/>
-        <activity android:name=".activities.auth_activities.RedefineSenhaActivity"/>
-        <activity android:name=".activities.EntradaActivity" android:theme=
-            "@style/Theme.AppCompat.NoActionBar"></activity>
+        <activity
+            android:name=".activities.fragments.MenuActivity"
+            android:label="@string/title_activity_menu"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity android:name=".activities.auth_activities.CriaContaActivity" />
+        <activity android:name=".activities.auth_activities.LoginActivity" />
+        <activity android:name=".activities.auth_activities.RedefineSenhaActivity" />
+        <activity
+            android:name=".activities.EntradaActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
         <activity android:name=".activities.PrincipalActivity" />
         <activity
             android:name=".activities.SplashScreenActivity"

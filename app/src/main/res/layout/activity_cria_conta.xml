@@ -17,7 +17,7 @@
             android:layout_width="150dp"
             android:layout_height="150dp"
             android:contentDescription="TODO"
-            android:src="@drawable/personal_delivery_login"
+            android:src="@drawable/personal_delivery_logo"
             app:layout_constraintBottom_toTopOf="@id/input_email_cria_conta"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

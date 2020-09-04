@@ -22,7 +22,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/personal_delivery_login" />
+            app:srcCompat="@drawable/personal_delivery_logo" />
 
         <Button
             android:id="@+id/bt_entrar_login"

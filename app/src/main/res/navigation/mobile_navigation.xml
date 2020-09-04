@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/nav_inicio">
+
+    <fragment
+        android:id="@+id/nav_inicio"
+        android:name="br.com.projeto.personal_delivery.activities.fragments.navigation_ui.fragment_inicio.InicioFragment"
+        android:label="@string/menu_inicio"
+        tools:layout="@layout/principal_navigation_fragment" />
+
+    <fragment
+        android:id="@+id/nav_lista_professores"
+        android:name="br.com.projeto.personal_delivery.activities.fragments.navigation_ui.fragment_lista_professores.ListaProfessoresFragment"
+        android:label="@string/menu_lista_professores"
+        tools:layout="@layout/lista_professores_navigation_fragment" />
+
+    <fragment
+        android:id="@+id/nav_favoritos"
+        android:name="br.com.projeto.personal_delivery.activities.fragments.navigation_ui.fragment_favoritos.FavoritosFragment"
+        android:label="@string/menu_favoritos"
+        tools:layout="@layout/favoritos_navigation_fragment" />
+</navigation>

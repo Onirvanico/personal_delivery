@@ -3,17 +3,20 @@ package br.com.projeto.personal_delivery.activities;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import br.com.projeto.personal_delivery.R;
 
-public class PrincipalActivity extends AppCompatActivity {
+public class PrincipalActivity extends FragmentActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +33,7 @@ public class PrincipalActivity extends AppCompatActivity {
             finish();
         });
 
+
     }
 
 
@@ -44,6 +48,5 @@ public class PrincipalActivity extends AppCompatActivity {
 
         }
     }
-
 
 }
