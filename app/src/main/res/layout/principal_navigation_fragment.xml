@@ -4,6 +4,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.fragments.navigation_ui.fragment_inicio.InicioFragment">
+    tools:context=".activities.navigation_menu.navigation_fragment.fragment_inicio.InicioFragment">
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:textSize="30sp"
+        android:text="Aqui carrega a geolocalização dos trainers"
+        android:textColor="@android:color/holo_green_dark"
+        android:gravity="center_vertical|center_horizontal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

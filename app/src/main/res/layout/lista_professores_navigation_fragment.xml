@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.fragments.navigation_ui.fragment_lista_professores.ListaProfessoresFragment">
+    tools:context=".activities.navigation_menu.navigation_fragment.fragment_lista_professores.ListaProfessoresFragment">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_lista_professores"

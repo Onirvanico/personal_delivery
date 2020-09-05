@@ -7,9 +7,13 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
 import br.com.projeto.personal_delivery.R;
 import br.com.projeto.personal_delivery.activities.auth_activities.CriaContaActivity;
 import br.com.projeto.personal_delivery.activities.auth_activities.LoginActivity;
+import br.com.projeto.personal_delivery.activities.navigation_menu.MenuActivity;
 
 public class EntradaActivity extends AppCompatActivity {
 
@@ -23,6 +27,21 @@ public class EntradaActivity extends AppCompatActivity {
         configuraBotaoEntrarNaConta();
 
 
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        atualizaTela();
+    }
+
+    private void atualizaTela() {
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        if(currentUser != null) {
+            startActivity(new Intent(this, MenuActivity.class));
+            finish();
+        }
     }
 
     private void configuraBotaoEntrarNaConta() {

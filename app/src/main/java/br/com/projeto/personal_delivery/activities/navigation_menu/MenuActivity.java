@@ -1,9 +1,7 @@
-package br.com.projeto.personal_delivery.activities.fragments;
+package br.com.projeto.personal_delivery.activities.navigation_menu;
 
 import android.os.Bundle;
-import android.view.ContextMenu;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
 
@@ -19,6 +17,7 @@ import androidx.navigation.ui.NavigationUI;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.auth.FirebaseAuth;
 
 import br.com.projeto.personal_delivery.R;
 
@@ -58,13 +57,15 @@ public class MenuActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu, menu);
-        return true;
+
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if(item.getItemId() == R.menu.menu) {
-            Toast.makeText(this, "Menu selecionado", Toast.LENGTH_SHORT).show();
+        if(item.getItemId() == R.id.bt_config) {
+            FirebaseAuth.getInstance().signOut();
+            finish();
         }
         return super.onOptionsItemSelected(item);
     }

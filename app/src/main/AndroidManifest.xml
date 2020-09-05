@@ -12,7 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".activities.fragments.MenuActivity"
+            android:name=".activities.navigation_menu.MenuActivity"
             android:label="@string/title_activity_menu"
             android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity android:name=".activities.auth_activities.CriaContaActivity" />
@@ -21,7 +21,6 @@
         <activity
             android:name=".activities.EntradaActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar" />
-        <activity android:name=".activities.PrincipalActivity" />
         <activity
             android:name=".activities.SplashScreenActivity"
             android:theme="@style/AppThemeTelaCheia">

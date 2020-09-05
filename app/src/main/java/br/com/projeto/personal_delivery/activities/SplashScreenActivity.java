@@ -16,12 +16,11 @@ public class SplashScreenActivity extends AppCompatActivity {
         setContentView(R.layout.activity_splash_screen);
 
         Handler handler = new Handler();
-        handler.postDelayed(this::mostraInicio, 3000);
+        handler.postDelayed(this::mostraEntrada, 3000);
     }
 
-    private void mostraInicio() {
+    private void mostraEntrada() {
         startActivity(new Intent(this, EntradaActivity.class));
         finish();
-
     }
 }

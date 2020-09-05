@@ -1,4 +1,4 @@
-package br.com.projeto.personal_delivery.activities.fragments.navigation_ui.adapter;
+package br.com.projeto.personal_delivery.activities.navigation_menu.navigation_fragment.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;

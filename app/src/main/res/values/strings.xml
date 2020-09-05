@@ -12,9 +12,24 @@
     <string name="nav_header_title">Personal Trainer</string>
     <string name="nav_header_subtitle">android.studio@android.com</string>
     <string name="nav_header_desc">Navigation header</string>
-    <string name="action_settings">Settings</string>
+    <string name="action_settings">Sair</string>
 
     <string name="menu_inicio">Início</string>
     <string name="menu_lista_professores">Lista de Professores</string>
     <string name="menu_favoritos">Favoritos</string>
+    <string name="texto_entrada_activity">Encontre um personal trainer mais próximo de você</string>
+    <string name="bt_login_entrada">Já tenho conta</string>
+    <string name="bt_registrar_entrada">Registrar-me</string>
+    <string name="texto_link_politicas_entrada">Nossas políticas de uso</string>
+    <string name="bt_logar_login">Entrar</string>
+    <string name="logo_app">logo do app</string>
+    <string name="input_hint_senha">Senha</string>
+    <string name="item_label_nome">Nome</string>
+    <string name="item_texto_nome">Nome do professor</string>
+    <string name="item_label_experiencia">Experiência</string>
+    <string name="item_texto_experiencia">Experiência do professor</string>
+    <string name="bt_cria_conta">Criar Conta</string>
+    <string name="input_hint_confirma_senah">Confirmar senha</string>
+    <string name="texto_link_redefinir_senha">Esqueceu sua senha?</string>
+    <string name="bt_loga_com_google">Conta Google</string>
 </resources>

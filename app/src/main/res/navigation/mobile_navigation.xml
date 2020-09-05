@@ -7,19 +7,19 @@
 
     <fragment
         android:id="@+id/nav_inicio"
-        android:name="br.com.projeto.personal_delivery.activities.fragments.navigation_ui.fragment_inicio.InicioFragment"
+        android:name="br.com.projeto.personal_delivery.activities.navigation_menu.navigation_fragment.fragment_inicio.InicioFragment"
         android:label="@string/menu_inicio"
         tools:layout="@layout/principal_navigation_fragment" />
 
     <fragment
         android:id="@+id/nav_lista_professores"
-        android:name="br.com.projeto.personal_delivery.activities.fragments.navigation_ui.fragment_lista_professores.ListaProfessoresFragment"
+        android:name="br.com.projeto.personal_delivery.activities.navigation_menu.navigation_fragment.fragment_lista_professores.ListaProfessoresFragment"
         android:label="@string/menu_lista_professores"
         tools:layout="@layout/lista_professores_navigation_fragment" />
 
     <fragment
         android:id="@+id/nav_favoritos"
-        android:name="br.com.projeto.personal_delivery.activities.fragments.navigation_ui.fragment_favoritos.FavoritosFragment"
+        android:name="br.com.projeto.personal_delivery.activities.navigation_menu.navigation_fragment.fragment_favoritos.FavoritosFragment"
         android:label="@string/menu_favoritos"
         tools:layout="@layout/favoritos_navigation_fragment" />
 </navigation>

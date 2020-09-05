@@ -1,4 +1,4 @@
-package br.com.projeto.personal_delivery.activities.fragments.navigation_ui.fragment_lista_professores;
+package br.com.projeto.personal_delivery.activities.navigation_menu.navigation_fragment.fragment_lista_professores;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -14,13 +14,12 @@ import java.util.Arrays;
 import java.util.List;
 
 import br.com.projeto.personal_delivery.R;
-import br.com.projeto.personal_delivery.activities.fragments.navigation_ui.adapter.ListaProfessoresAdapter;
+import br.com.projeto.personal_delivery.activities.navigation_menu.navigation_fragment.adapter.ListaProfessoresAdapter;
 import br.com.projeto.personal_delivery.model.Professor;
 
 
 public class ListaProfessoresFragment extends Fragment {
 
-    private ListaProfessoresViewModel listaProfessoresViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {

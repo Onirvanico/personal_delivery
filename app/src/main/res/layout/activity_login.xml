@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/fundo_autenticacao"
-    tools:context=".activities.LoginActivity">
+    android:background="@drawable/fundo_autenticacao">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -16,8 +15,9 @@
             android:id="@+id/image_personal_delivery"
             android:layout_width="150dp"
             android:layout_height="150dp"
-            android:scaleType="centerCrop"
+            android:contentDescription="@string/logo_app"
 
+            android:scaleType="centerCrop"
             app:layout_constraintBottom_toTopOf="@id/input_email_login"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -30,7 +30,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:background="@drawable/formato_botao"
-            android:text="Entrar"
+            android:text="@string/bt_logar_login"
             android:textColor="@android:color/background_light"
             android:textStyle="bold"
             app:layout_constraintLeft_toLeftOf="@id/input_senha_login"
@@ -43,19 +43,18 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="2dp"
+            android:autofillHints=""
             android:background="@drawable/formato_campo"
             android:backgroundTint="@color/cor_padrao_app"
+
             android:drawableStart="@android:drawable/ic_lock_lock"
-            android:drawableLeft="@android:drawable/ic_lock_lock"
-            android:drawableTint="@android:color/background_light"
-            android:hint="Senha"
+            android:hint="@string/input_hint_senha"
             android:inputType="textPassword"
             android:padding="10dp"
             android:textColorHint="@android:color/white"
             app:layout_constraintEnd_toEndOf="@id/input_email_login"
             app:layout_constraintStart_toStartOf="@id/input_email_login"
-            app:layout_constraintTop_toBottomOf="@+id/input_email_login"
-            app:layout_constraintVertical_bias="0.202" />
+            app:layout_constraintTop_toBottomOf="@+id/input_email_login" />
 
         <EditText
             android:id="@+id/input_email_login"
@@ -67,17 +66,16 @@
             android:background="@drawable/formato_campo"
             android:backgroundTint="@color/cor_padrao_app"
             android:drawableStart="@android:drawable/sym_action_email"
-            android:drawableLeft="@android:drawable/ic_dialog_email"
             android:drawablePadding="@dimen/fui_button_inset_right"
-            android:drawableTint="@android:color/background_light"
-            android:hint="Email"
-            android:inputType="textPersonName"
+            android:hint="@string/fui_email_hint"
+            android:inputType="textEmailAddress"
             android:padding="10dp"
             android:textColorHint="@android:color/white"
             app:layout_constraintBottom_toTopOf="@id/input_senha_login"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/image_personal_delivery" />
+            app:layout_constraintTop_toBottomOf="@id/image_personal_delivery"
+            android:autofillHints="" />
 
         <TextView
             android:id="@+id/textLinkTelaAlteraSenha"
@@ -86,7 +84,7 @@
             android:layout_margin="20dp"
             android:paddingLeft="20dp"
             android:paddingRight="20dp"
-            android:text="Esqueceu sua senha?"
+            android:text="@string/texto_link_redefinir_senha"
             android:textColor="@android:color/background_dark"
             android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -111,10 +109,9 @@
             android:layout_marginTop="20dp"
             android:background="@drawable/formato_botao"
             android:drawableStart="@drawable/googleg_standard_color_18"
-            android:drawableLeft="@drawable/googleg_standard_color_18"
-            android:paddingLeft="25dp"
-            android:paddingRight="20dp"
-            android:text="Conta Google"
+            android:paddingStart="25dp"
+            android:paddingEnd="20dp"
+            android:text="@string/bt_loga_com_google"
             android:textColor="@android:color/background_light"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="@id/textLinkTelaAlteraSenha"

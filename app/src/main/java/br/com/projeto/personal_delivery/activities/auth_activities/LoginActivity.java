@@ -18,7 +18,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import br.com.projeto.personal_delivery.R;
-import br.com.projeto.personal_delivery.activities.fragments.MenuActivity;
+import br.com.projeto.personal_delivery.activities.navigation_menu.MenuActivity;
 import br.com.projeto.personal_delivery.auth.Autenticacao;
 import br.com.projeto.personal_delivery.auth.AutenticacaoGoogle;
 import br.com.projeto.personal_delivery.auth.callback.CallbackAutentica;
